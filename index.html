@@ -1,0 +1,301 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111827">
+  <title>WRB mm Devan - Katalog</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,sans-serif;background:#f3f4f6;color:#111827}
+    header{background:#111827;color:white;padding:25px 18px;text-align:center}
+    header h1{margin:0 0 8px;font-size:27px}
+    header p{margin:0;color:#d1d5db}
+    main{max-width:950px;margin:auto;padding:18px}
+    .panel{background:white;border-radius:14px;padding:16px;margin-bottom:18px;box-shadow:0 2px 8px #0000000a}
+    h2{margin-top:0}
+    input,textarea,button{width:100%;padding:12px;margin:6px 0;border:1px solid #d1d5db;border-radius:8px;font-size:15px}
+    button{background:#111827;color:white;border:0;font-weight:bold;cursor:pointer}
+    button.secondary{background:#e5e7eb;color:#111827}
+    button.whatsapp{background:#15803d;color:white}
+    .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:14px}
+    .product{background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px #00000012}
+    .product img{width:100%;height:155px;object-fit:cover;background:#e5e7eb}
+    .product .info{padding:12px}
+    .product h3{font-size:16px;margin:0 0 8px;overflow-wrap:anywhere}
+    .price{font-size:18px;font-weight:bold;color:#047857}
+    .stock{font-size:13px;color:#4b5563;margin:7px 0}
+    .muted{color:#6b7280;font-size:13px}
+    .hidden{display:none}
+    .notice{padding:12px;background:#fef3c7;border-radius:8px;margin-bottom:12px;overflow-wrap:anywhere}
+    .row{display:flex;gap:8px;align-items:center}
+    .row button{flex:1}
+    footer{text-align:center;padding:20px;color:#6b7280;font-size:13px}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>WRB mm Devan</h1>
+    <p>Katalog produk tersedia</p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Katalog Produk</h2>
+      <p class="muted">Pilih produk yang ingin dipesan melalui WhatsApp.</p>
+      <div id="catalogStatus">Katalog belum dikonfigurasi.</div>
+      <div id="products" class="products"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Pengaturan Koneksi</h2>
+      <p class="muted">Isi URL proyek dan publishable/anon key Supabase milik Anda. Pengaturan ini disimpan hanya di browser ini.</p>
+      <input id="projectUrl" placeholder="Supabase Project URL">
+      <input id="publicKey" placeholder="Supabase publishable key atau anon key">
+      <button id="saveConfig">Simpan koneksi & muat katalog</button>
+      <p class="muted">Jangan pernah memasukkan service_role key atau secret key di sini.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Login Pemilik Toko</h2>
+      <p class="muted">Masuk untuk menambahkan produk dan mengatur stok.</p>
+      <input id="email" type="email" autocomplete="username" placeholder="Email akun Supabase">
+      <input id="password" type="password" autocomplete="current-password" placeholder="Password akun Supabase">
+      <button id="loginBtn">Login</button>
+      <button id="logoutBtn" class="secondary hidden">Logout</button>
+      <div id="adminStatus" class="muted"></div>
+    </section>
+
+    <section id="adminPanel" class="panel hidden">
+      <h2>Kelola Produk</h2>
+      <input id="pName" placeholder="Nama produk" required>
+      <textarea id="pDesc" placeholder="Deskripsi produk"></textarea>
+      <input id="pSku" placeholder="Kode SKU (opsional)">
+      <input id="pPrice" type="number" min="0" placeholder="Harga jual (Rupiah)">
+      <input id="pCost" type="number" min="0" placeholder="Harga modal (Rupiah)">
+      <input id="pStock" type="number" min="0" placeholder="Jumlah stok">
+      <input id="pImage" type="url" placeholder="URL gambar produk (opsional)">
+      <button id="addProduct">Tambah produk</button>
+      <hr>
+      <h3>Atur stok produk</h3>
+      <div id="stockManager"></div>
+    </section>
+  </main>
+
+  <footer>WRB mm Devan · Katalog online</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const STORE_ID = "9376d880-840a-4919-9cfb-8989e779cb56";
+    const STORE_SLUG = "wrb-mm-devan";
+    const WHATSAPP = "6287753818318";
+    let db = null;
+
+    const $ = id => document.getElementById(id);
+    const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    })[c]);
+    const rupiah = value => new Intl.NumberFormat("id-ID", {
+      style:"currency",currency:"IDR",maximumFractionDigits:0
+    }).format(Number(value) || 0);
+
+    function status(message) { $("catalogStatus").textContent = message; }
+
+    function connect() {
+      const url = localStorage.getItem("wrb_supabase_url");
+      const key = localStorage.getItem("wrb_supabase_key");
+      if (!url || !key || !window.supabase) return false;
+      try {
+        db = window.supabase.createClient(url, key);
+        return true;
+      } catch (e) {
+        status("URL atau key Supabase tidak valid.");
+        return false;
+      }
+    }
+
+    async function loadCatalog() {
+      if (!db && !connect()) {
+        status("Masukkan koneksi Supabase di bagian Pengaturan.");
+        return;
+      }
+      status("Memuat katalog...");
+      $("products").innerHTML = "";
+      const {data, error} = await db.rpc("get_public_catalog", {
+        p_slug: STORE_SLUG
+      });
+      if (error) {
+        status("Katalog gagal dimuat. Periksa URL, key, dan fungsi katalog Supabase.");
+        console.error(error);
+        return;
+      }
+      const items = (data || []).filter(p => Number(p.stock) > 0);
+      if (!items.length) {
+        status("Belum ada produk yang tersedia.");
+        return;
+      }
+      status("");
+      $("products").innerHTML = items.map(p => `
+        <article class="product">
+          ${p.image_url
+            ? `<img src="${esc(p.image_url)}" alt="${esc(p.product_name)}" loading="lazy">`
+            : `<div style="height:155px;display:grid;place-items:center;background:#e5e7eb;color:#6b7280">Tanpa gambar</div>`}
+          <div class="info">
+            <h3>${esc(p.product_name)}</h3>
+            <p>${esc(p.description || "")}</p>
+            <div class="price">${rupiah(p.price)}</div>
+            <div class="stock">Stok: ${Number(p.stock)}</div>
+            <button class="whatsapp" data-order="${esc(p.product_name)}">Pesan via WhatsApp</button>
+          </div>
+        </article>
+      `).join("");
+      $("products").querySelectorAll("[data-order]").forEach(button => {
+        button.addEventListener("click", () => {
+          const name = button.getAttribute("data-order");
+          const message = `Halo WRB mm Devan, saya ingin memesan ${name}. Apakah masih tersedia?`;
+          window.open("https://wa.me/" + WHATSAPP + "?text=" +
+            encodeURIComponent(message), "_blank", "noopener");
+        });
+      });
+    }
+
+    async function showAdmin() {
+      if (!db) return;
+      const {data} = await db.auth.getSession();
+      const loggedIn = !!data?.session;
+      $("adminPanel").classList.toggle("hidden", !loggedIn);
+      $("logoutBtn").classList.toggle("hidden", !loggedIn);
+      $("loginBtn").classList.toggle("hidden", loggedIn);
+      $("adminStatus").textContent = loggedIn
+        ? "Login berhasil. Anda dapat mengelola produk."
+        : "Belum login.";
+      if (loggedIn) await loadStockManager();
+    }
+
+    async function loadStockManager() {
+      const {data, error} = await db.from("products")
+        .select("id,name,stock,is_public")
+        .eq("store_id", STORE_ID)
+        .order("name");
+      if (error) {
+        $("stockManager").textContent = "Produk gagal dimuat. Pastikan akun Anda pemilik toko.";
+        return;
+      }
+      if (!data?.length) {
+        $("stockManager").textContent = "Belum ada produk.";
+        return;
+      }
+      $("stockManager").innerHTML = data.map(p => `
+        <div class="panel">
+          <strong>${esc(p.name)}</strong>
+          <label>Stok</label>
+          <input type="number" min="0" id="stock-${esc(p.id)}" value="${Number(p.stock)}">
+          <label>Ditampilkan di katalog</label>
+          <select id="public-${esc(p.id)}">
+            <option value="true" ${p.is_public ? "selected" : ""}>Ya</option>
+            <option value="false" ${!p.is_public ? "selected" : ""}>Tidak</option>
+          </select>
+          <button data-save="${esc(p.id)}">Simpan stok</button>
+        </div>
+      `).join("");
+      $("stockManager").querySelectorAll("[data-save]").forEach(button => {
+        button.addEventListener("click", async () => {
+          const id = button.getAttribute("data-save");
+          const stock = Number($("stock-" + id).value);
+          const is_public = $("public-" + id).value === "true";
+          if (!Number.isInteger(stock) || stock < 0) {
+            alert("Stok harus berupa bilangan bulat nol atau lebih.");
+            return;
+          }
+          const {error} = await db.from("products")
+            .update({stock, is_public}).eq("id", id).eq("store_id", STORE_ID);
+          if (error) alert("Gagal menyimpan stok: " + error.message);
+          else {
+            alert("Stok berhasil disimpan.");
+            await loadStockManager();
+            await loadCatalog();
+          }
+        });
+      });
+    }
+
+    $("saveConfig").addEventListener("click", async () => {
+      const url = $("projectUrl").value.trim().replace(/\/+$/, "");
+      const key = $("publicKey").value.trim();
+      if (!/^https:\/\/[a-zA-Z0-9.-]+$/.test(url) || !key) {
+        alert("Masukkan Project URL HTTPS dan publishable/anon key yang benar.");
+        return;
+      }
+      localStorage.setItem("wrb_supabase_url", url);
+      localStorage.setItem("wrb_supabase_key", key);
+      connect();
+      await loadCatalog();
+      await showAdmin();
+    });
+
+    $("loginBtn").addEventListener("click", async () => {
+      if (!db && !connect()) {
+        alert("Simpan koneksi Supabase terlebih dahulu.");
+        return;
+      }
+      const {error} = await db.auth.signInWithPassword({
+        email: $("email").value.trim(),
+        password: $("password").value
+      });
+      if (error) alert("Login gagal: " + error.message);
+      else {
+        $("password").value = "";
+        await showAdmin();
+      }
+    });
+
+    $("logoutBtn").addEventListener("click", async () => {
+      await db.auth.signOut();
+      await showAdmin();
+    });
+
+    $("addProduct").addEventListener("click", async () => {
+      const name = $("pName").value.trim();
+      const price = Number($("pPrice").value);
+      const cost = Number($("pCost").value || 0);
+      const stock = Number($("pStock").value);
+      if (!name || $("pPrice").value === "" || $("pStock").value === "" ||
+          !Number.isFinite(price) || price < 0 ||
+          !Number.isFinite(cost) || cost < 0 ||
+          !Number.isInteger(stock) || stock < 0) {
+        alert("Isi nama, harga jual, dan stok dengan benar.");
+        return;
+      }
+      const {error} = await db.from("products").insert({
+        store_id: STORE_ID,
+        name,
+        description: $("pDesc").value.trim(),
+        sku: $("pSku").value.trim() || null,
+        price,
+        cost_price: cost,
+        stock,
+        image_url: $("pImage").value.trim() || null,
+        is_public: true
+      });
+      if (error) {
+        alert("Produk gagal ditambahkan: " + error.message);
+        return;
+      }
+      alert("Produk berhasil ditambahkan.");
+      ["pName","pDesc","pSku","pPrice","pCost","pStock","pImage"]
+        .forEach(id => $(id).value = "");
+      await loadStockManager();
+      await loadCatalog();
+    });
+
+    window.addEventListener("DOMContentLoaded", async () => {
+      $("projectUrl").value = localStorage.getItem("wrb_supabase_url") || "";
+      if (connect()) {
+        await loadCatalog();
+        await showAdmin();
+      }
+    });
+  </script>
+</body>
+</html>
