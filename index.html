@@ -484,6 +484,506 @@ $("checkoutBtn").addEventListener("click", async () => {
   button.disabled = true;
   button.textContent = "Menyimpan transaksi...";
 
+
+const STORE_ID = "9376d880-840a-4919-9cfb-8989e779cb56";
+const STORE_SLUG = "wrb-mm-devan";
+const WHATSAPP = "6287753818318";
+
+let db = null;
+let posProducts = [];
+let posCart = {};
+
+const $ = id => document.getElementById(id);
+
+const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;"
+})[c]);
+
+const rupiah = value => new Intl.NumberFormat("id-ID", {
+  style: "currency",
+  currency: "IDR",
+  maximumFractionDigits: 0
+}).format(Number(value) || 0);
+
+function status(message) {
+  $("catalogStatus").textContent = message;
+}
+
+function connect() {
+  const url = localStorage.getItem("wrb_supabase_url");
+  const key = localStorage.getItem("wrb_supabase_key");
+
+  if (!url || !key || !window.supabase) return false;
+
+  try {
+    db = window.supabase.createClient(url, key);
+    return true;
+  } catch (e) {
+    status("URL atau key Supabase tidak valid.");
+    return false;
+  }
+}
+
+async function loadCatalog() {
+  if (!db && !connect()) {
+    status("Masukkan koneksi Supabase di bagian Pengaturan.");
+    return;
+  }
+
+  status("Memuat katalog...");
+  $("products").innerHTML = "";
+
+  const { data, error } = await db.rpc("get_public_catalog", {
+    p_slug: STORE_SLUG
+  });
+
+  if (error) {
+    status("Katalog gagal dimuat. Periksa URL, key, dan fungsi katalog Supabase.");
+    console.error(error);
+    return;
+  }
+
+  const items = (data || []).filter(p => Number(p.stock) > 0);
+
+  if (!items.length) {
+    status("Belum ada produk yang tersedia.");
+    return;
+  }
+
+  status("");
+
+  $("products").innerHTML = items.map(p => `
+    <article class="product">
+      ${p.image_url
+        ? `<img src="${esc(p.image_url)}" alt="${esc(p.product_name)}" loading="lazy">`
+        : `<div style="height:155px;display:grid;place-items:center;background:#e5e7eb;color:#6b7280">Tanpa gambar</div>`}
+      <div class="info">
+        <h3>${esc(p.product_name)}</h3>
+        <p>${esc(p.description || "")}</p>
+        <div class="price">${rupiah(p.price)}</div>
+        <div class="stock">Stok: ${Number(p.stock)}</div>
+        <button class="whatsapp" data-order="${esc(p.product_name)}">
+          Pesan via WhatsApp
+        </button>
+      </div>
+    </article>
+  `).join("");
+
+  $("products").querySelectorAll("[data-order]").forEach(button => {
+    button.addEventListener("click", () => {
+      const name = button.getAttribute("data-order");
+      const message = `Halo WRB mm Devan, saya ingin memesan ${name}. Apakah masih tersedia?`;
+
+      window.open(
+        "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(message),
+        "_blank",
+        "noopener"
+      );
+    });
+  });
+}
+
+async function showAdmin() {
+  if (!db) return;
+
+  const { data, error } = await db.auth.getSession();
+
+  if (error) {
+    $("adminStatus").textContent = "Gagal memeriksa status login.";
+    console.error(error);
+    return;
+  }
+
+  const loggedIn = !!data?.session;
+
+  $("adminPanel").classList.toggle("hidden", !loggedIn);
+  $("logoutBtn").classList.toggle("hidden", !loggedIn);
+  $("loginBtn").classList.toggle("hidden", loggedIn);
+
+  $("adminStatus").textContent = loggedIn
+    ? "Login berhasil. Anda dapat mengelola produk."
+    : "Belum login.";
+
+  if (loggedIn) {
+    await loadStockManager();
+    await loadPosProducts();
+    await loadSalesHistory();
+  }
+}
+
+async function loadStockManager() {
+  const { data, error } = await db.from("products")
+    .select("id,name,stock,is_public")
+    .eq("store_id", STORE_ID)
+    .order("name");
+
+  if (error) {
+    $("stockManager").textContent =
+      "Produk gagal dimuat. Pastikan akun Anda pemilik toko.";
+    console.error(error);
+    return;
+  }
+
+  if (!data?.length) {
+    $("stockManager").textContent = "Belum ada produk.";
+    return;
+  }
+
+  $("stockManager").innerHTML = data.map(p => `
+    <div class="panel">
+      <strong>${esc(p.name)}</strong>
+      <label>Stok</label>
+      <input type="number" min="0" id="stock-${esc(p.id)}" value="${Number(p.stock)}">
+      <label>Ditampilkan di katalog</label>
+      <select id="public-${esc(p.id)}">
+        <option value="true" ${p.is_public ? "selected" : ""}>Ya</option>
+        <option value="false" ${!p.is_public ? "selected" : ""}>Tidak</option>
+      </select>
+      <button data-save="${esc(p.id)}">Simpan stok</button>
+    </div>
+  `).join("");
+
+  $("stockManager").querySelectorAll("[data-save]").forEach(button => {
+    button.addEventListener("click", async () => {
+      const id = button.getAttribute("data-save");
+      const stock = Number($("stock-" + id).value);
+      const is_public = $("public-" + id).value === "true";
+
+      if (!Number.isInteger(stock) || stock < 0) {
+        alert("Stok harus berupa bilangan bulat nol atau lebih.");
+        return;
+      }
+
+      const { error } = await db.from("products")
+        .update({ stock, is_public })
+        .eq("id", id)
+        .eq("store_id", STORE_ID);
+
+      if (error) {
+        alert("Gagal menyimpan stok: " + error.message);
+      } else {
+        alert("Stok berhasil disimpan.");
+        await loadStockManager();
+        await loadPosProducts();
+        await loadCatalog();
+      }
+    });
+  });
+}
+
+async function loadPosProducts() {
+  if (!db) return;
+
+  $("posStatus").textContent = "Memuat produk kasir...";
+
+  const { data, error } = await db.from("products")
+    .select("id,name,price,stock")
+    .eq("store_id", STORE_ID)
+    .order("name");
+
+  if (error) {
+    $("posStatus").textContent =
+      "Produk gagal dimuat. Pastikan sudah login.";
+    console.error(error);
+    return;
+  }
+
+  posProducts = data || [];
+
+  // Hapus produk dari keranjang jika sudah tidak tersedia.
+  for (const id of Object.keys(posCart)) {
+    const p = posProducts.find(item => item.id === id);
+    if (!p || Number(p.stock) <= 0) {
+      delete posCart[id];
+    } else if (posCart[id] > Number(p.stock)) {
+      posCart[id] = Number(p.stock);
+    }
+  }
+
+  $("posStatus").textContent = posProducts.length
+    ? "Pilih produk untuk dimasukkan ke keranjang."
+    : "Belum ada produk.";
+
+  renderPosProducts();
+  renderPosCart();
+}
+
+function renderPosProducts() {
+  $("posProducts").innerHTML = posProducts.map(p => `
+    <div class="panel">
+      <strong>${esc(p.name)}</strong>
+      <p>${rupiah(p.price)}</p>
+      <p class="muted">Stok: ${Number(p.stock)}</p>
+      <button type="button" data-pos-add="${esc(p.id)}"
+        ${Number(p.stock) <= 0 ? "disabled" : ""}>
+        Tambah ke Keranjang
+      </button>
+    </div>
+  `).join("");
+
+  $("posProducts").querySelectorAll("[data-pos-add]").forEach(button => {
+    button.addEventListener("click", () => {
+      const id = button.getAttribute("data-pos-add");
+      const product = posProducts.find(p => p.id === id);
+      if (!product) return;
+
+      const quantity = posCart[id] || 0;
+
+      if (quantity >= Number(product.stock)) {
+        alert("Jumlah melebihi stok yang tersedia.");
+        return;
+      }
+
+      posCart[id] = quantity + 1;
+      renderPosCart();
+    });
+  });
+}
+
+function renderPosCart() {
+  const items = Object.entries(posCart)
+    .filter(([, quantity]) => quantity > 0);
+
+  if (!items.length) {
+    $("posCart").textContent = "Keranjang masih kosong.";
+    $("posTotal").textContent = rupiah(0);
+    return;
+  }
+
+  let total = 0;
+
+  $("posCart").innerHTML = items.map(([id, quantity]) => {
+    const p = posProducts.find(item => item.id === id);
+    if (!p) return "";
+
+    const subtotal = Number(p.price) * quantity;
+    total += subtotal;
+
+    return `
+      <div class="panel">
+        <strong>${esc(p.name)}</strong>
+        <p>${rupiah(p.price)} × ${quantity}</p>
+        <p>Subtotal: ${rupiah(subtotal)}</p>
+        <div class="row">
+          <button type="button" data-pos-minus="${esc(id)}">−</button>
+          <button type="button" data-pos-plus="${esc(id)}">+</button>
+          <button type="button" class="secondary" data-pos-remove="${esc(id)}">
+            Hapus
+          </button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  $("posTotal").textContent = rupiah(total);
+
+  $("posCart").querySelectorAll("[data-pos-minus]").forEach(button => {
+    button.addEventListener("click", () => {
+      const id = button.dataset.posMinus;
+      posCart[id]--;
+
+      if (posCart[id] <= 0) delete posCart[id];
+
+      renderPosCart();
+    });
+  });
+
+  $("posCart").querySelectorAll("[data-pos-plus]").forEach(button => {
+    button.addEventListener("click", () => {
+      const id = button.dataset.posPlus;
+      const p = posProducts.find(item => item.id === id);
+      if (!p) return;
+
+      if ((posCart[id] || 0) >= Number(p.stock)) {
+        alert("Jumlah melebihi stok yang tersedia.");
+        return;
+      }
+
+      posCart[id]++;
+      renderPosCart();
+    });
+  });
+
+  $("posCart").querySelectorAll("[data-pos-remove]").forEach(button => {
+    button.addEventListener("click", () => {
+      delete posCart[button.dataset.posRemove];
+      renderPosCart();
+    });
+  });
+}
+
+async function loadSalesHistory() {
+  const { data, error } = await db.from("sales")
+    .select("id,total,payment_method,sold_at")
+    .eq("store_id", STORE_ID)
+    .order("sold_at", { ascending: false })
+    .limit(10);
+
+  if (error) {
+    $("salesHistory").textContent = "Riwayat transaksi gagal dimuat.";
+    console.error(error);
+    return;
+  }
+
+  if (!data?.length) {
+    $("salesHistory").textContent = "Belum ada transaksi.";
+    return;
+  }
+
+  $("salesHistory").innerHTML = data.map(s => `
+    <div class="panel">
+      <strong>${esc(new Date(s.sold_at).toLocaleString("id-ID"))}</strong>
+      <p>Total: ${rupiah(s.total)}</p>
+      <p>Bayar: ${esc(s.payment_method)}</p>
+      <p class="muted">ID: ${esc(s.id)}</p>
+    </div>
+  `).join("");
+}
+
+// Simpan konfigurasi koneksi Supabase.
+$("saveConfig").addEventListener("click", async () => {
+  const url = $("projectUrl").value.trim().replace(/\/+$/, "");
+  const key = $("publicKey").value.trim();
+
+  if (!/^https:\/\/[a-zA-Z0-9.-]+$/.test(url) || !key) {
+    alert("Masukkan Project URL HTTPS dan publishable/anon key yang benar.");
+    return;
+  }
+
+  localStorage.setItem("wrb_supabase_url", url);
+  localStorage.setItem("wrb_supabase_key", key);
+
+  if (!connect()) {
+    alert("Koneksi Supabase gagal.");
+    return;
+  }
+
+  await loadCatalog();
+  await showAdmin();
+});
+
+// Login pemilik toko.
+$("loginBtn").addEventListener("click", async () => {
+  if (!db && !connect()) {
+    alert("Simpan koneksi Supabase terlebih dahulu.");
+    return;
+  }
+
+  const { error } = await db.auth.signInWithPassword({
+    email: $("email").value.trim(),
+    password: $("password").value
+  });
+
+  if (error) {
+    alert("Login gagal: " + error.message);
+  } else {
+    $("password").value = "";
+    await showAdmin();
+  }
+});
+
+// Logout pemilik toko.
+$("logoutBtn").addEventListener("click", async () => {
+  if (!db) return;
+
+  const { error } = await db.auth.signOut();
+
+  if (error) {
+    alert("Logout gagal: " + error.message);
+    return;
+  }
+
+  posCart = {};
+  await showAdmin();
+});
+
+// Tambah produk — pembuka fungsi ini sudah diperbaiki.
+$("addProduct").addEventListener("click", async () => {
+  if (!db) {
+    alert("Koneksi Supabase belum siap.");
+    return;
+  }
+
+  const { data: sessionData } = await db.auth.getSession();
+
+  if (!sessionData?.session) {
+    alert("Silakan login terlebih dahulu.");
+    return;
+  }
+
+  const name = $("pName").value.trim();
+  const price = Number($("pPrice").value);
+  const cost = Number($("pCost").value || 0);
+  const stock = Number($("pStock").value);
+
+  if (!name || $("pPrice").value === "" || $("pStock").value === "" ||
+      !Number.isFinite(price) || price < 0 ||
+      !Number.isFinite(cost) || cost < 0 ||
+      !Number.isInteger(stock) || stock < 0) {
+    alert("Isi nama, harga jual, dan stok dengan benar.");
+    return;
+  }
+
+  const { error } = await db.from("products").insert({
+    store_id: STORE_ID,
+    name,
+    description: $("pDesc").value.trim(),
+    sku: $("pSku").value.trim() || null,
+    price,
+    cost_price: cost,
+    stock,
+    image_url: $("pImage").value.trim() || null,
+    is_public: true
+  });
+
+  if (error) {
+    alert("Produk gagal ditambahkan: " + error.message);
+    return;
+  }
+
+  alert("Produk berhasil ditambahkan.");
+
+  ["pName", "pDesc", "pSku", "pPrice", "pCost", "pStock", "pImage"]
+    .forEach(id => $(id).value = "");
+
+  await loadStockManager();
+  await loadPosProducts();
+  await loadCatalog();
+});
+
+// Simpan transaksi melalui fungsi database yang memvalidasi harga dan stok.
+$("checkoutBtn").addEventListener("click", async () => {
+  if (!db) {
+    alert("Koneksi Supabase belum siap.");
+    return;
+  }
+
+  const { data: sessionData, error: sessionError } = await db.auth.getSession();
+
+  if (sessionError || !sessionData?.session) {
+    alert("Silakan login sebagai pemilik toko.");
+    return;
+  }
+
+  const items = Object.entries(posCart)
+    .filter(([, quantity]) => Number.isInteger(quantity) && quantity > 0)
+    .map(([product_id, quantity]) => ({ product_id, quantity }));
+
+  if (!items.length) {
+    alert("Keranjang masih kosong.");
+    return;
+  }
+
+  if (!confirm("Simpan transaksi dan kurangi stok produk?")) return;
+
+  const button = $("checkoutBtn");
+  button.disabled = true;
+  button.textContent = "Menyimpan transaksi...";
+
   try {
     const { data: saleId, error } = await db.rpc("create_sale", {
       p_store_id: STORE_ID,
@@ -511,47 +1011,17 @@ $("checkoutBtn").addEventListener("click", async () => {
     button.textContent = "Simpan Transaksi";
   }
 });
-").addEventListener("click", async () => {
-      const name = $("pName").value.trim();
-      const price = Number($("pPrice").value);
-      const cost = Number($("pCost").value || 0);
-      const stock = Number($("pStock").value);
-      if (!name || $("pPrice").value === "" || $("pStock").value === "" ||
-          !Number.isFinite(price) || price < 0 ||
-          !Number.isFinite(cost) || cost < 0 ||
-          !Number.isInteger(stock) || stock < 0) {
-        alert("Isi nama, harga jual, dan stok dengan benar.");
-        return;
-      }
-      const {error} = await db.from("products").insert({
-        store_id: STORE_ID,
-        name,
-        description: $("pDesc").value.trim(),
-        sku: $("pSku").value.trim() || null,
-        price,
-        cost_price: cost,
-        stock,
-        image_url: $("pImage").value.trim() || null,
-        is_public: true
-      });
-      if (error) {
-        alert("Produk gagal ditambahkan: " + error.message);
-        return;
-      }
-      alert("Produk berhasil ditambahkan.");
-      ["pName","pDesc","pSku","pPrice","pCost","pStock","pImage"]
-        .forEach(id => $(id).value = "");
-      await loadStockManager();
-      await loadCatalog();
-    });
 
-    window.addEventListener("DOMContentLoaded", async () => {
-      $("projectUrl").value = localStorage.getItem("wrb_supabase_url") || "";
-      if (connect()) {
-        await loadCatalog();
-        await showAdmin();
-      }
-    });
+// Muat konfigurasi saat halaman dibuka.
+window.addEventListener("DOMContentLoaded", async () => {
+  $("projectUrl").value = localStorage.getItem("wrb_supabase_url") || "";
+
+  if (connect()) {
+    await loadCatalog();
+    await showAdmin();
+  }
+});
+
   </script>
 </body>
 </html>
