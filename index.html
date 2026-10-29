@@ -22,7 +22,7 @@ footer{text-align:center;padding:20px;color:#6b7280;font-size:13px}
 <header><h1>WRB mm Devan</h1><p>Katalog produk tersedia</p></header>
 <main>
 <section class="panel"><h2>Katalog Produk</h2><p class="muted">Pilih produk yang ingin dipesan melalui WhatsApp.</p><div id="catalogStatus">Katalog belum dikonfigurasi.</div><div id="products" class="products"></div></section>
-<section class="panel"><h2>Pengaturan Koneksi</h2><p class="muted">Isi URL proyek dan publishable/anon key Supabase. Pengaturan disimpan hanya di browser ini.</p>
+<section id="connectionPanel" class="panel hidden"><h2>Pengaturan Koneksi</h2><p class="muted">Isi URL proyek dan publishable/anon key Supabase. Pengaturan disimpan hanya di browser ini.</p>
 <input id="projectUrl" placeholder="Supabase Project URL" autocomplete="url"><input id="publicKey" placeholder="Supabase publishable key atau anon key" autocomplete="off">
 <button id="saveConfig" type="button">Simpan koneksi &amp; muat katalog</button><p class="muted">Jangan pernah memasukkan service_role key atau secret key di sini.</p></section>
 <section id="loginPanel" class="panel hidden"><h2>Login Pemilik Toko</h2><p class="muted">Masuk untuk menambahkan produk dan mengatur stok.</p>
