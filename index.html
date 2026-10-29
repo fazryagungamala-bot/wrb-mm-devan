@@ -62,7 +62,10 @@ async function loadCatalog(){
   if(!items.length){status("Belum ada produk yang tersedia.");return}
   status("");$("products").innerHTML=items.map(p=>`<article class="product">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.product_name)}" loading="lazy">`:`<div style="height:155px;display:grid;place-items:center;background:#e5e7eb;color:#6b7280">Tanpa gambar</div>`}<div class="info"><h3>${esc(p.product_name)}</h3><p>${esc(p.description||"")}</p><div class="price">${rupiah(p.price)}</div><div class="stock">Stok: ${Number(p.stock)}</div><button class="whatsapp" type="button" data-order="${esc(p.product_name)}">Pesan via WhatsApp</button></div></article>`).join("");
   $("products").querySelectorAll("[data-order]").forEach(b=>b.addEventListener("click",()=>{const msg=`Halo WRB mm Devan, saya ingin memesan ${b.getAttribute("data-order")}. Apakah masih tersedia?`;window.open("https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(msg),"_blank","noopener")}));
- }catch(e){console.error(e);status("Katalog gagal dimuat. Periksa URL, key, dan fungsi katalog Supabase.")}
+ }catch(e){
+ console.error("Error katalog Supabase:",e);
+ status("Katalog gagal: "+(e.message||JSON.stringify(e)));
+}
 }
 async function showAdmin(){
  if(!db)return;const {data,error}=await db.auth.getSession();
