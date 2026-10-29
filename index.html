@@ -25,7 +25,11 @@ footer{text-align:center;padding:20px;color:#6b7280;font-size:13px}
 <section id="connectionPanel" class="panel hidden"><h2>Pengaturan Koneksi</h2><p class="muted">Isi URL proyek dan publishable/anon key Supabase. Pengaturan disimpan hanya di browser ini.</p>
 <input id="projectUrl" placeholder="Supabase Project URL" autocomplete="url"><input id="publicKey" placeholder="Supabase publishable key atau anon key" autocomplete="off">
 <button id="saveConfig" type="button">Simpan koneksi &amp; muat katalog</button><p class="muted">Jangan pernah memasukkan service_role key atau secret key di sini.</p></section>
-<section id="loginPanel" class="panel hidden"><h2>Login Pemilik Toko</h2><p class="muted">Masuk untuk menambahkan produk dan mengatur stok.</p>
+
+<section id="loginPanel" class="panel hidden">
+<h2>Login Pemilik Toko</h2>
+<button type="button" class="secondary" onclick="document.getElementById('loginPanel').classList.add('hidden')">Tutup Login</button>
+<p class="muted">Masuk untuk menambahkan produk dan mengatur stok.</p>
 <input id="email" type="email" autocomplete="username" placeholder="Email akun Supabase"><input id="password" type="password" autocomplete="current-password" placeholder="Password akun Supabase">
 <button id="loginBtn" type="button">Login</button><button id="logoutBtn" class="secondary hidden" type="button">Logout</button>
 <button id="connectionAccess" type="button" class="secondary" onclick="document.getElementById('connectionPanel').classList.remove('hidden'); document.getElementById('connectionPanel').scrollIntoView({behavior:'smooth'});">Pengaturan Koneksi</button>
