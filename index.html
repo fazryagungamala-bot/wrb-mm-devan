@@ -27,7 +27,9 @@ footer{text-align:center;padding:20px;color:#6b7280;font-size:13px}
 <button id="saveConfig" type="button">Simpan koneksi &amp; muat katalog</button><p class="muted">Jangan pernah memasukkan service_role key atau secret key di sini.</p></section>
 <section id="loginPanel" class="panel hidden"><h2>Login Pemilik Toko</h2><p class="muted">Masuk untuk menambahkan produk dan mengatur stok.</p>
 <input id="email" type="email" autocomplete="username" placeholder="Email akun Supabase"><input id="password" type="password" autocomplete="current-password" placeholder="Password akun Supabase">
-<button id="loginBtn" type="button">Login</button><button id="logoutBtn" class="secondary hidden" type="button">Logout</button><button id="connectionAccess" type="button" class="secondary">Pengaturan Koneksi</button></section>
+<button id="loginBtn" type="button">Login</button><button id="logoutBtn" class="secondary hidden" type="button">Logout</button>
+<button id="connectionAccess" type="button" class="secondary" onclick="document.getElementById('connectionPanel').classList.remove('hidden'); document.getElementById('connectionPanel').scrollIntoView({behavior:'smooth'});">Pengaturan Koneksi</button>
+</section>
 <section id="adminPanel" class="panel hidden"><h2>Kelola Produk</h2>
 <input id="pName" placeholder="Nama produk"><textarea id="pDesc" placeholder="Deskripsi produk"></textarea><input id="pSku" placeholder="Kode SKU (opsional)">
 <input id="pPrice" type="number" min="0" step="1" placeholder="Harga jual (Rupiah)"><input id="pCost" type="number" min="0" step="1" placeholder="Harga modal (Rupiah)">
