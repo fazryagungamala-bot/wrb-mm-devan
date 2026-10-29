@@ -160,10 +160,16 @@ $("ownerAccess").addEventListener("click",()=>{
   $("loginPanel").scrollIntoView({behavior:"smooth"});
 });
 
+
 window.addEventListener("DOMContentLoaded",async()=>{
  $("projectUrl").value=localStorage.getItem("wrb_supabase_url")||"";
- if(connect()){await loadCatalog();await showAdmin()}else status("Masukkan koneksi Supabase di bagian Pengaturan.")
+ if(connect()){
+   await loadCatalog();
+ }else{
+   status("Masukkan koneksi Supabase di bagian Pengaturan.");
+ }
 });
+
 </script>
 </body>
 </html>
