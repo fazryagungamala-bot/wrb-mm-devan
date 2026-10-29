@@ -182,7 +182,78 @@ input, textarea, select {
     height: 200px !important;
   }
 }
-</style>
+
+/* SENTUHAN AKHIR WRB MM DEVAN */
+html {
+  scroll-behavior: smooth;
+}
+
+.panel,
+.product {
+  transition:
+    border-color .25s ease,
+    box-shadow .25s ease,
+    transform .25s ease;
+}
+
+@media (hover: hover) {
+  .product:hover {
+    transform: translateY(-4px);
+    border-color: #8b5cf6;
+    box-shadow:
+      0 10px 28px #0006,
+      0 0 18px #8b5cf622;
+  }
+
+  .panel:hover {
+    border-color: #493568;
+  }
+
+  button:hover {
+    filter: brightness(1.12);
+    box-shadow: 0 0 18px #8b5cf644;
+  }
+}
+
+.product img {
+  display: block;
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+button,
+input,
+textarea,
+select {
+  min-height: 42px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+::selection {
+  background: #8b5cf6;
+  color: #ffffff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+  </style>
 </head>
 <body>
 <header><h1>WRB mm Devan</h1><p>Katalog produk tersedia</p></header>
