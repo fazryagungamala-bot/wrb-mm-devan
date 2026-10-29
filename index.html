@@ -153,6 +153,13 @@ $("checkoutBtn").addEventListener("click",async()=>{
  }catch(e){console.error(e);alert("Transaksi gagal: "+e.message);await loadPosProducts()}
  finally{b.disabled=false;b.textContent="Simpan Transaksi"}
 });
+  
+$("ownerAccess").addEventListener("click",()=>{
+  $("loginPanel").classList.remove("hidden");
+  $("connectionPanel").classList.remove("hidden");
+  $("loginPanel").scrollIntoView({behavior:"smooth"});
+});
+
 window.addEventListener("DOMContentLoaded",async()=>{
  $("projectUrl").value=localStorage.getItem("wrb_supabase_url")||"";
  if(connect()){await loadCatalog();await showAdmin()}else status("Masukkan koneksi Supabase di bagian Pengaturan.")
