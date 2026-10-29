@@ -38,7 +38,12 @@ footer{text-align:center;padding:20px;color:#6b7280;font-size:13px}
 <label for="posPayment">Metode pembayaran</label><select id="posPayment"><option value="cash">Tunai</option><option value="transfer">Transfer</option><option value="qris">QRIS</option></select>
 <label for="posNote">Catatan transaksi (opsional)</label><textarea id="posNote" placeholder="Catatan transaksi"></textarea><button id="checkoutBtn" type="button">Simpan Transaksi</button>
 <hr><h3>Riwayat Transaksi</h3><div id="salesHistory">Riwayat belum dimuat.</div></section>
-</main><footer>WRB mm Devan · Katalog online</footer>
+</main>
+<footer>
+  WRB mm Devan · Katalog online
+  <button id="ownerAccess" type="button">Login Pemilik</button>
+</footer>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 "use strict";
