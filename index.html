@@ -156,10 +156,8 @@ $("checkoutBtn").addEventListener("click",async()=>{
   
 $("ownerAccess").addEventListener("click",()=>{
   $("loginPanel").classList.remove("hidden");
-  $("connectionPanel").classList.remove("hidden");
   $("loginPanel").scrollIntoView({behavior:"smooth"});
 });
-
 
 window.addEventListener("DOMContentLoaded",async()=>{
  $("projectUrl").value=localStorage.getItem("wrb_supabase_url")||"";
