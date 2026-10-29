@@ -71,6 +71,117 @@ h1, h2, h3 {
 a {
   color: #a78bfa;
 }
+
+/* POLISH: TOKO ONLINE HITAM UNGU */
+header {
+  background: linear-gradient(135deg, #09090f, #21103d 65%, #4c1d95) !important;
+  color: #fff !important;
+  padding: 34px 18px !important;
+  border-bottom: 1px solid #7c3aed;
+  box-shadow: 0 8px 35px #7c3aed22;
+}
+
+header h1 {
+  font-size: clamp(26px, 6vw, 36px) !important;
+  letter-spacing: 1px;
+  text-shadow: 0 0 18px #a855f766;
+}
+
+header p {
+  color: #c4b5fd !important;
+}
+
+main {
+  max-width: 1050px;
+  padding: 20px 14px !important;
+}
+
+.panel {
+  background: linear-gradient(145deg, #181522, #101018) !important;
+  border: 1px solid #302447;
+  box-shadow: 0 8px 28px #0005, 0 0 16px #8b5cf60a !important;
+}
+
+h2 {
+  color: #c4b5fd;
+}
+
+.products {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+}
+
+.product {
+  background: #14121e !important;
+  border: 1px solid #35264e;
+  border-radius: 16px !important;
+  box-shadow: 0 6px 20px #0005 !important;
+  transition: transform .2s, border-color .2s, box-shadow .2s;
+}
+
+.product:active {
+  transform: scale(.98);
+}
+
+.product img {
+  height: 175px !important;
+  object-fit: contain !important;
+  padding: 8px;
+  background: #0e0c15 !important;
+}
+
+.product .info {
+  padding: 14px !important;
+}
+
+.product h3 {
+  color: #f5f3ff;
+  line-height: 1.4;
+}
+
+.product .price {
+  color: #c4b5fd !important;
+  font-size: 19px !important;
+  margin-top: 10px;
+}
+
+.product .stock {
+  color: #a1a1aa !important;
+}
+
+button {
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9) !important;
+  color: #fff !important;
+  border: 1px solid #a78bfa !important;
+  box-shadow: 0 3px 12px #7c3aed25;
+  transition: filter .2s;
+}
+
+button:active {
+  filter: brightness(1.2);
+}
+
+button.whatsapp {
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9) !important;
+}
+
+input, textarea, select {
+  border-radius: 10px !important;
+}
+
+.muted, footer {
+  color: #a1a1aa !important;
+}
+
+@media (max-width: 360px) {
+  .products {
+    grid-template-columns: 1fr !important;
+  }
+
+  .product img {
+    height: 200px !important;
+  }
+}
 </style>
 </head>
 <body>
