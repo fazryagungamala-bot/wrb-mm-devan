@@ -77,11 +77,47 @@
       <input id="pStock" type="number" min="0" placeholder="Jumlah stok">
       <input id="pImage" type="url" placeholder="URL gambar produk (opsional)">
       <button id="addProduct">Tambah produk</button>
+      
       <hr>
       <h3>Atur stok produk</h3>
       <div id="stockManager"></div>
-    </section>
-  </main>
+
+      <hr>
+      <h2>Kasir / Transaksi</h2>
+      <p class="muted">Pilih produk untuk membuat transaksi penjualan.</p>
+
+      <div id="posStatus" class="notice">
+        Memuat produk kasir...
+      </div>
+
+      <div id="posProducts"></div>
+
+      <h3>Keranjang Belanja</h3>
+      <div id="posCart">Keranjang masih kosong.</div>
+
+      <h3>Total: <span id="posTotal">Rp0</span></h3>
+
+      <label for="posPayment">Metode pembayaran</label>
+      <select id="posPayment">
+        <option value="cash">Tunai</option>
+        <option value="transfer">Transfer</option>
+        <option value="qris">QRIS</option>
+      </select>
+
+      <label for="posNote">Catatan transaksi (opsional)</label>
+      <textarea id="posNote" placeholder="Catatan transaksi"></textarea>
+
+      <button id="checkoutBtn" type="button">
+        Simpan Transaksi
+      </button>
+
+      
+      <hr>
+      <h3>Riwayat Transaksi</h3>
+      <div id="salesHistory">Riwayat belum dimuat.</div>
+</section>
+
+</main>
 
   <footer>WRB mm Devan · Katalog online</footer>
 
@@ -170,8 +206,11 @@
       $("adminStatus").textContent = loggedIn
         ? "Login berhasil. Anda dapat mengelola produk."
         : "Belum login.";
-      if (loggedIn) await loadStockManager();
-    }
+      if (loggedIn) {
+  await loadStockManager();
+  await loadPosProducts();
+  await loadSalesHistory();
+}
 
     async function loadStockManager() {
       const {data, error} = await db.from("products")
@@ -255,7 +294,224 @@
       await showAdmin();
     });
 
-    $("addProduct").addEventListener("click", async () => {
+    $("
+let posProducts = [];
+let posCart = {};
+
+async function loadPosProducts() {
+  if (!db) return;
+
+  $("posStatus").textContent = "Memuat produk kasir...";
+
+  const { data, error } = await db
+    .from("products")
+    .select("id,name,price,stock")
+    .eq("store_id", STORE_ID)
+    .order("name");
+
+  if (error) {
+    $("posStatus").textContent =
+      "Produk gagal dimuat. Pastikan sudah login.";
+    console.error(error);
+    return;
+  }
+
+  posProducts = data || [];
+  $("posStatus").textContent = posProducts.length
+    ? "Pilih produk untuk dimasukkan ke keranjang."
+    : "Belum ada produk.";
+
+  renderPosProducts();
+  renderPosCart();
+}
+
+function renderPosProducts() {
+  $("posProducts").innerHTML = posProducts.map(p => `
+    <div class="panel">
+      <strong>${esc(p.name)}</strong>
+      <p>${rupiah(p.price)}</p>
+      <p class="muted">Stok: ${Number(p.stock)}</p>
+      <button type="button" data-pos-add="${esc(p.id)}"
+        ${Number(p.stock) <= 0 ? "disabled" : ""}>
+        Tambah ke Keranjang
+      </button>
+    </div>
+  `).join("");
+
+  $("posProducts").querySelectorAll("[data-pos-add]")
+    .forEach(button => {
+      button.addEventListener("click", () => {
+        const id = button.getAttribute("data-pos-add");
+        const product = posProducts.find(p => p.id === id);
+        if (!product) return;
+
+        const quantity = posCart[id] || 0;
+
+        if (quantity >= Number(product.stock)) {
+          alert("Jumlah melebihi stok yang tersedia.");
+          return;
+        }
+
+        posCart[id] = quantity + 1;
+        renderPosCart();
+      });
+    });
+}
+
+function renderPosCart() {
+  const items = Object.entries(posCart)
+    .filter(([, quantity]) => quantity > 0);
+
+  if (!items.length) {
+    $("posCart").textContent = "Keranjang masih kosong.";
+    $("posTotal").textContent = rupiah(0);
+    return;
+  }
+
+  let total = 0;
+
+  $("posCart").innerHTML = items.map(([id, quantity]) => {
+    const p = posProducts.find(item => item.id === id);
+    if (!p) return "";
+
+    const subtotal = Number(p.price) * quantity;
+    total += subtotal;
+
+    return `
+      <div class="panel">
+        <strong>${esc(p.name)}</strong>
+        <p>${rupiah(p.price)} × ${quantity}</p>
+        <p>Subtotal: ${rupiah(subtotal)}</p>
+        <div class="row">
+          <button type="button" data-pos-minus="${esc(id)}">−</button>
+          <button type="button" data-pos-plus="${esc(id)}">+</button>
+          <button type="button" class="secondary"
+            data-pos-remove="${esc(id)}">Hapus</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  $("posTotal").textContent = rupiah(total);
+
+  $("posCart").querySelectorAll("[data-pos-minus]")
+    .forEach(button => button.addEventListener("click", () => {
+      const id = button.dataset.posMinus;
+      posCart[id]--;
+      if (posCart[id] <= 0) delete posCart[id];
+      renderPosCart();
+    }));
+
+  $("posCart").querySelectorAll("[data-pos-plus]")
+    .forEach(button => button.addEventListener("click", () => {
+      const id = button.dataset.posPlus;
+      const p = posProducts.find(item => item.id === id);
+      if (!p) return;
+
+      if ((posCart[id] || 0) >= Number(p.stock)) {
+        alert("Jumlah melebihi stok yang tersedia.");
+        return;
+      }
+
+      posCart[id]++;
+      renderPosCart();
+    }));
+
+  $("posCart").querySelectorAll("[data-pos-remove]")
+    .forEach(button => button.addEventListener("click", () => {
+      delete posCart[button.dataset.posRemove];
+      renderPosCart();
+    }));
+}
+
+async function loadSalesHistory() {
+  const { data, error } = await db
+    .from("sales")
+    .select("id,total,payment_method,sold_at")
+    .eq("store_id", STORE_ID)
+    .order("sold_at", { ascending: false })
+    .limit(10);
+
+  if (error) {
+    $("salesHistory").textContent =
+      "Riwayat transaksi gagal dimuat.";
+    console.error(error);
+    return;
+  }
+
+  if (!data || !data.length) {
+    $("salesHistory").textContent = "Belum ada transaksi.";
+    return;
+  }
+
+  $("salesHistory").innerHTML = data.map(s => `
+    <div class="panel">
+      <strong>${esc(new Date(s.sold_at).toLocaleString("id-ID"))}</strong>
+      <p>Total: ${rupiah(s.total)}</p>
+      <p>Bayar: ${esc(s.payment_method)}</p>
+      <p class="muted">ID: ${esc(s.id)}</p>
+    </div>
+  `).join("");
+}
+
+$("checkoutBtn").addEventListener("click", async () => {
+  if (!db) {
+    alert("Koneksi Supabase belum siap.");
+    return;
+  }
+
+  const { data: sessionData } = await db.auth.getSession();
+
+  if (!sessionData?.session) {
+    alert("Silakan login sebagai pemilik toko.");
+    return;
+  }
+
+  const items = Object.entries(posCart)
+    .filter(([, quantity]) => quantity > 0)
+    .map(([product_id, quantity]) => ({ product_id, quantity }));
+
+  if (!items.length) {
+    alert("Keranjang masih kosong.");
+    return;
+  }
+
+  if (!confirm("Simpan transaksi dan kurangi stok produk?")) {
+    return;
+  }
+
+  const button = $("checkoutBtn");
+  button.disabled = true;
+  button.textContent = "Menyimpan transaksi...";
+
+  try {
+    const { data: saleId, error } = await db.rpc("create_sale", {
+      p_store_id: STORE_ID,
+      p_items: items,
+      p_payment_method: $("posPayment").value,
+      p_note: $("posNote").value.trim()
+    });
+
+    if (error) throw error;
+
+    posCart = {};
+    $("posNote").value = "";
+
+    alert("Transaksi berhasil disimpan!\nID: " + saleId);
+
+    await loadPosProducts();
+    await loadStockManager();
+    await loadCatalog();
+    await loadSalesHistory();
+  } catch (error) {
+    alert("Transaksi gagal: " + error.message);
+    await loadPosProducts();
+  } finally {
+    button.disabled = false;
+    button.textContent = "Simpan Transaksi";
+  }
+});
+").addEventListener("click", async () => {
       const name = $("pName").value.trim();
       const price = Number($("pPrice").value);
       const cost = Number($("pCost").value || 0);
