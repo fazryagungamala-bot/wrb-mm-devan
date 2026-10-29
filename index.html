@@ -284,7 +284,20 @@ select:focus {
 <body>
 <header><h1>WRB mm Devan</h1><p>Katalog produk tersedia</p></header>
 <main>
-<section class="panel"><h2>Katalog Produk</h2><p class="muted">Pilih produk yang ingin dipesan melalui WhatsApp.</p><div id="catalogStatus">Katalog belum dikonfigurasi.</div><div id="products" class="products"></div></section>
+<section class="panel"><h2>Katalog Produk</h2><p class="muted">Pilih produk yang ingin dipesan melalui WhatsApp.</p><div id="catalogStatus">Katalog belum dikonfigurasi.</div>
+ 
+<div class="catalog-search">
+  <span>🔎</span>
+  <input
+    id="productSearch"
+    type="search"
+    placeholder="Cari nama produk..."
+    aria-label="Cari produk"
+    autocomplete="off"
+  />
+</div> 
+  
+<div id="products" class="products"></div></section>
 
 <section id="connectionPanel" class="panel hidden">
 <h2>Pengaturan Koneksi</h2>
