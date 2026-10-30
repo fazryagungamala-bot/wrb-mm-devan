@@ -297,7 +297,54 @@ select:focus {
   />
 </div> 
   
-<div id="products" class="products"></div></section>
+<div id="products" class="products"></div>
+</section>
+
+<section id="onlineCartPanel" class="panel">
+  <h2>Keranjang Pesanan</h2>
+  <p class="muted">Produk yang ingin kamu pesan.</p>
+
+  <div id="onlineCart">Keranjang masih kosong.</div>
+
+  <h3>Total: <span id="onlineTotal">Rp0</span></h3>
+
+  <hr>
+
+  <h2>Data Pemesan</h2>
+  <input
+    id="customerName"
+    type="text"
+    placeholder="Nama lengkap"
+    autocomplete="name"
+  >
+
+  <input
+    id="customerWhatsapp"
+    type="tel"
+    placeholder="Nomor WhatsApp, contoh 628123456789"
+    autocomplete="tel"
+  >
+
+  <textarea
+    id="customerAddress"
+    placeholder="Alamat lengkap pengiriman"
+    rows="3"
+  ></textarea>
+
+  <textarea
+    id="customerNote"
+    placeholder="Catatan tambahan (opsional)"
+    rows="2"
+  ></textarea>
+
+  <button id="onlineCheckoutBtn" type="button">
+    Buat Pesanan
+  </button>
+
+  <p id="onlineOrderStatus" class="muted">
+    Pesanan akan menunggu konfirmasi admin.
+  </p>
+</section>
 
 <section id="connectionPanel" class="panel hidden">
 <h2>Pengaturan Koneksi</h2>
