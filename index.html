@@ -383,6 +383,7 @@ select:focus {
 "use strict";
 const STORE_ID="9376d880-840a-4919-9cfb-8989e779cb56", STORE_SLUG="wrb-mm-devan", WHATSAPP="6287753818318";
 let db=null, posProducts=[], posCart={};
+let catalogProducts=[], onlineCart={};
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const rupiah=v=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(v)||0);
@@ -393,6 +394,154 @@ function connect(){
  try{db=window.supabase.createClient(url,key);return true}catch(e){console.error(e);status("URL atau key Supabase tidak valid.");return false}
 }
 async function loadCatalog(){
+ if(!db&&!connect()){
+  status("Masukkan koneksi Supabase di bagian Pengaturan.");
+  return;
+ }
+
+ status("Memuat katalog...");
+ $("products").innerHTML="";
+
+ try{
+  const {data,error}=await db.rpc("get_public_catalog",{
+   p_slug:STORE_SLUG
+  });
+
+  if(error)throw error;
+
+  catalogProducts=(data||[]).filter(p=>Number(p.stock)>0);
+
+  if(!catalogProducts.length){
+   status("Belum ada produk yang tersedia.");
+   renderOnlineCart();
+   return;
+  }
+
+  status("");
+  renderCatalog();
+  renderOnlineCart();
+
+ }catch(e){
+  console.error("Error katalog Supabase:",e);
+  status("Katalog gagal: "+(e.message||JSON.stringify(e)));
+ }
+}
+
+function renderCatalog(){
+ const keyword=($("productSearch")?.value||"").trim().toLowerCase();
+
+ const items=catalogProducts.filter(p=>
+  String(p.product_name||"").toLowerCase().includes(keyword)
+ );
+
+ if(!items.length){
+  $("products").innerHTML='<p class="muted">Produk tidak ditemukan.</p>';
+  return;
+ }
+
+ $("products").innerHTML=items.map(p=>`
+  <article class="product">
+   ${p.image_url
+    ? `<img src="${esc(p.image_url)}" alt="${esc(p.product_name)}" loading="lazy">`
+    : `<div style="height:155px;display:grid;place-items:center;background:#0e0c15;color:#a1a1aa">Tanpa gambar</div>`
+   }
+   <div class="info">
+    <h3>${esc(p.product_name)}</h3>
+    <p>${esc(p.description||"")}</p>
+    <div class="price">${rupiah(p.price)}</div>
+    <div class="stock">Stok: ${Number(p.stock)}</div>
+    <button type="button" data-add-online="${esc(p.product_id)}">
+     Tambah ke Keranjang
+    </button>
+   </div>
+  </article>
+ `).join("");
+
+ $("products").querySelectorAll("[data-add-online]").forEach(b=>{
+  b.addEventListener("click",()=>{
+   const id=b.dataset.addOnline;
+   const p=catalogProducts.find(x=>String(x.product_id)===id);
+   if(!p)return;
+
+   const current=onlineCart[id]||0;
+
+   if(current>=Number(p.stock)){
+    alert("Jumlah melebihi stok yang tersedia.");
+    return;
+   }
+
+   onlineCart[id]=current+1;
+   renderOnlineCart();
+  });
+ });
+}
+
+function renderOnlineCart(){
+ const entries=Object.entries(onlineCart).filter(([,q])=>q>0);
+
+ if(!entries.length){
+  $("onlineCart").textContent="Keranjang masih kosong.";
+  $("onlineTotal").textContent=rupiah(0);
+  return;
+ }
+
+ let total=0;
+
+ $("onlineCart").innerHTML=entries.map(([id,q])=>{
+  const p=catalogProducts.find(x=>String(x.product_id)===id);
+  if(!p)return"";
+
+  const subtotal=Number(p.price)*q;
+  total+=subtotal;
+
+  return `
+   <div class="panel">
+    <strong>${esc(p.product_name)}</strong>
+    <p>${rupiah(p.price)} × ${q}</p>
+    <p>Subtotal: ${rupiah(subtotal)}</p>
+    <div class="row">
+     <button type="button" data-online-minus="${esc(id)}">−</button>
+     <button type="button" data-online-plus="${esc(id)}">+</button>
+     <button type="button" class="secondary" data-online-remove="${esc(id)}">Hapus</button>
+    </div>
+   </div>
+  `;
+ }).join("");
+
+ $("onlineTotal").textContent=rupiah(total);
+
+ $("onlineCart").querySelectorAll("[data-online-minus]").forEach(b=>{
+  b.addEventListener("click",()=>{
+   const id=b.dataset.onlineMinus;
+   onlineCart[id]--;
+   if(onlineCart[id]<=0)delete onlineCart[id];
+   renderOnlineCart();
+  });
+ });
+
+ $("onlineCart").querySelectorAll("[data-online-plus]").forEach(b=>{
+  b.addEventListener("click",()=>{
+   const id=b.dataset.onlinePlus;
+   const p=catalogProducts.find(x=>String(x.product_id)===id);
+   if(!p)return;
+
+   if(onlineCart[id]>=Number(p.stock)){
+    alert("Jumlah melebihi stok yang tersedia.");
+    return;
+   }
+
+   onlineCart[id]++;
+   renderOnlineCart();
+  });
+ });
+
+ $("onlineCart").querySelectorAll("[data-online-remove]").forEach(b=>{
+  b.addEventListener("click",()=>{
+   delete onlineCart[b.dataset.onlineRemove];
+   renderOnlineCart();
+  });
+ });
+}
  if(!db&&!connect()){status("Masukkan koneksi Supabase di bagian Pengaturan.");return}
  status("Memuat katalog...");$("products").innerHTML="";
  try{
@@ -488,9 +637,10 @@ $("checkoutBtn").addEventListener("click",async()=>{
  finally{b.disabled=false;b.textContent="Simpan Transaksi"}
 });
   
+$("productSearch").addEventListener("input",renderCatalog);
 $("ownerAccess").addEventListener("click",()=>{
-  $("loginPanel").classList.remove("hidden");
-  $("loginPanel").scrollIntoView({behavior:"smooth"});
+$("loginPanel").classList.remove("hidden");
+$("loginPanel").scrollIntoView({behavior:"smooth"});
 });
 
 window.addEventListener("DOMContentLoaded",async()=>{
