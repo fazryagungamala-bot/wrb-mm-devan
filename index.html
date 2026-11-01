@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#111827">
 <title>WRB mm Devan - Katalog</title>
-
-  <style>
+<style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f4f6;color:#111827}
 header{background:#111827;color:white;padding:25px 18px;text-align:center}header h1{margin:0 0 8px;font-size:27px}header p{margin:0;color:#d1d5db}
 main{max-width:950px;margin:auto;padding:18px}.panel{background:white;border-radius:14px;padding:16px;margin-bottom:18px;box-shadow:0 2px 8px #0000000a}
@@ -19,364 +18,107 @@ button{background:#111827;color:white;border:0;font-weight:bold;cursor:pointer}b
 footer{text-align:center;padding:20px;color:#6b7280;font-size:13px}
 
 /* TEMA HITAM UNGU NEON */
-:root {
-  --bg: #09090f;
-  --panel: #14141f;
-  --text: #f5f3ff;
-  --muted: #a1a1aa;
-  --primary: #8b5cf6;
-  --accent: #a78bfa;
-  --border: #302447;
-}
-
-body {
-  background: #09090f !important;
-  color: #f5f3ff !important;
-}
-
-.panel,
-.card,
-.product-card {
-  background: #14141f !important;
-  color: #f5f3ff !important;
-  border-color: #302447 !important;
-  border-radius: 14px;
-}
-
-button,
-.btn {
-  background: #7c3aed;
-  color: #ffffff;
-  border-color: #8b5cf6;
-  border-radius: 10px;
-}
-
-button:hover,
-.btn:hover {
-  background: #6d28d9;
-}
-
-input,
-textarea,
-select {
-  background: #11111b !important;
-  color: #f5f3ff !important;
-  border-color: #493568 !important;
-}
-
-h1, h2, h3 {
-  color: #c4b5fd;
-}
-
-a {
-  color: #a78bfa;
-}
-
-/* POLISH: TOKO ONLINE HITAM UNGU */
-header {
-  background: linear-gradient(135deg, #09090f, #21103d 65%, #4c1d95) !important;
-  color: #fff !important;
-  padding: 34px 18px !important;
-  border-bottom: 1px solid #7c3aed;
-  box-shadow: 0 8px 35px #7c3aed22;
-}
-
-header h1 {
-  font-size: clamp(26px, 6vw, 36px) !important;
-  letter-spacing: 1px;
-  text-shadow: 0 0 18px #a855f766;
-}
-
-header p {
-  color: #c4b5fd !important;
-}
-
-main {
-  max-width: 1050px;
-  padding: 20px 14px !important;
-}
-
-.panel {
-  background: linear-gradient(145deg, #181522, #101018) !important;
-  border: 1px solid #302447;
-  box-shadow: 0 8px 28px #0005, 0 0 16px #8b5cf60a !important;
-}
-
-h2 {
-  color: #c4b5fd;
-}
-
-.products {
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 14px !important;
-}
-
-.product {
-  background: #14121e !important;
-  border: 1px solid #35264e;
-  border-radius: 16px !important;
-  box-shadow: 0 6px 20px #0005 !important;
-  transition: transform .2s, border-color .2s, box-shadow .2s;
-}
-
-.product:active {
-  transform: scale(.98);
-}
-
-.product img {
-  height: 175px !important;
-  object-fit: contain !important;
-  padding: 8px;
-  background: #0e0c15 !important;
-}
-
-.product .info {
-  padding: 14px !important;
-}
-
-.product h3 {
-  color: #f5f3ff;
-  line-height: 1.4;
-}
-
-.product .price {
-  color: #c4b5fd !important;
-  font-size: 19px !important;
-  margin-top: 10px;
-}
-
-.product .stock {
-  color: #a1a1aa !important;
-}
-
-button {
-  background: linear-gradient(135deg, #8b5cf6, #6d28d9) !important;
-  color: #fff !important;
-  border: 1px solid #a78bfa !important;
-  box-shadow: 0 3px 12px #7c3aed25;
-  transition: filter .2s;
-}
-
-button:active {
-  filter: brightness(1.2);
-}
-
-button.whatsapp {
-  background: linear-gradient(135deg, #8b5cf6, #6d28d9) !important;
-}
-
-input, textarea, select {
-  border-radius: 10px !important;
-}
-
-.muted, footer {
-  color: #a1a1aa !important;
-}
-
-@media (max-width: 360px) {
-  .products {
-    grid-template-columns: 1fr !important;
-  }
-
-  .product img {
-    height: 200px !important;
-  }
-}
-
-/* SENTUHAN AKHIR WRB MM DEVAN */
-html {
-  scroll-behavior: smooth;
-}
-
-.panel,
-.product {
-  transition:
-    border-color .25s ease,
-    box-shadow .25s ease,
-    transform .25s ease;
-}
-
+:root {--bg: #09090f;--panel: #14141f;--text: #f5f3ff;--muted: #a1a1aa;--primary: #8b5cf6;--accent: #a78bfa;--border: #302447;}
+body {background: #09090f !important;color: #f5f3ff !important;}
+.panel, .card, .product-card {background: #14141f !important;color: #f5f3ff !important;border-color: #302447 !important;border-radius: 14px;}
+button, .btn {background: #7c3aed;color: #ffffff;border-color: #8b5cf6;border-radius: 10px;}
+button:hover, .btn:hover {background: #6d28d9;}
+input, textarea, select {background: #11111b !important;color: #f5f3ff !important;border-color: #493568 !important;}
+h1, h2, h3 {color: #c4b5fd;}
+a {color: #a78bfa;}
+header {background: linear-gradient(135deg, #09090f, #21103d 65%, #4c1d95) !important;color: #fff !important;padding: 34px 18px !important;border-bottom: 1px solid #7c3aed;box-shadow: 0 8px 35px #7c3aed22;}
+header h1 {font-size: clamp(26px, 6vw, 36px) !important;letter-spacing: 1px;text-shadow: 0 0 18px #a855f766;}
+header p {color: #c4b5fd !important;}
+main {max-width: 1050px;padding: 20px 14px !important;}
+.panel {background: linear-gradient(145deg, #181522, #101018) !important;border: 1px solid #302447;box-shadow: 0 8px 28px #0005, 0 0 16px #8b5cf60a !important;}
+.products {grid-template-columns: repeat(2, minmax(0, 1fr)) !important;gap: 14px !important;}
+.product {background: #14121e !important;border: 1px solid #35264e;border-radius: 16px !important;box-shadow: 0 6px 20px #0005 !important;transition: transform .2s, border-color .2s, box-shadow .2s;}
+.product img {height: 175px !important;object-fit: contain !important;padding: 8px;background: #0e0c15 !important;display: block;max-width: 100%;border-radius: 10px;}
+.product .info {padding: 14px !important;}
+.product h3 {color: #f5f3ff;line-height: 1.4;}
+.product .price {color: #c4b5fd !important;font-size: 19px !important;margin-top: 10px;}
+.product .stock {color: #a1a1aa !important;}
+button {background: linear-gradient(135deg, #8b5cf6, #6d28d9) !important;border: 1px solid #a78bfa !important;box-shadow: 0 3px 12px #7c3aed25;transition: filter .2s;min-height: 42px;}
+button.whatsapp {background: linear-gradient(135deg, #8b5cf6, #6d28d9) !important;}
+input, textarea, select {border-radius: 10px !important;min-height: 42px;}
+input:focus, textarea:focus, select:focus {outline: 2px solid #8b5cf6;outline-offset: 2px;}
+.muted, footer {color: #a1a1aa !important;}
+.finance-box { background: #1a1625 !important; border: 1px dashed #7c3aed; padding: 12px; border-radius: 10px; margin-bottom: 12px; }
+.finance-box h3 { margin: 0 0 5px; color: #10b981; }
 @media (hover: hover) {
-  .product:hover {
-    transform: translateY(-4px);
-    border-color: #8b5cf6;
-    box-shadow:
-      0 10px 28px #0006,
-      0 0 18px #8b5cf622;
-  }
-
-  .panel:hover {
-    border-color: #493568;
-  }
-
-  button:hover {
-    filter: brightness(1.12);
-    box-shadow: 0 0 18px #8b5cf644;
-  }
+  .product:hover {transform: translateY(-4px);border-color: #8b5cf6;box-shadow: 0 10px 28px #0006, 0 0 18px #8b5cf622;}
+  button:hover {filter: brightness(1.12);box-shadow: 0 0 18px #8b5cf644;}
 }
-
-.product img {
-  display: block;
-  max-width: 100%;
-  border-radius: 10px;
-}
-
-button,
-input,
-textarea,
-select {
-  min-height: 42px;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  outline: 2px solid #8b5cf6;
-  outline-offset: 2px;
-}
-
-::selection {
-  background: #8b5cf6;
-  color: #ffffff;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: .01ms !important;
-    transition-duration: .01ms !important;
-  }
-}
-
-/* Perbaiki background pesan kasir */
-#cashierPanel,
-#cashierPanel .panel,
-#cashierPanel .empty,
-#cashierPanel .empty-state,
-#cashierPanel .notice {
-  background-color: #14121e !important;
-  color: #e9ddff !important;
-  border-color: #493568 !important;
-}
-
-#cashierPanel p,
-#cashierPanel .muted {
-  color: #c4b5fd !important;
-}
-
-/* Perbaikan background status kasir */
-#posStatus {
-  background: #171323 !important;
-  background-color: #171323 !important;
-  color: #c4b5fd !important;
-  border: 1px solid #7c3aed !important;
-  border-radius: 12px !important;
-  box-shadow: 0 0 14px #7c3aed22 !important;
-}
-
-  </style>
+</style>
 </head>
 <body>
 <header><h1>WRB mm Devan</h1><p>Katalog produk tersedia</p></header>
 <main>
-<section class="panel"><h2>Katalog Produk</h2><p class="muted">Pilih produk yang ingin dipesan melalui WhatsApp.</p><div id="catalogStatus">Katalog belum dikonfigurasi.</div>
- 
-<div class="catalog-search">
-  <span>🔎</span>
-  <input
-    id="productSearch"
-    type="search"
-    placeholder="Cari nama produk..."
-    aria-label="Cari produk"
-    autocomplete="off"
-  />
-</div> 
-  
+<section class="panel"><h2>Katalog Produk</h2><p class="muted">Pilih produk yang ingin dipesan.</p><div id="catalogStatus">Katalog belum dikonfigurasi.</div>
+<div class="catalog-search"><span>🔎</span><input id="productSearch" type="search" placeholder="Cari nama produk..." autocomplete="off"/></div> 
 <div id="products" class="products"></div>
 </section>
 
 <section id="onlineCartPanel" class="panel">
-  <h2>Keranjang Pesanan</h2>
-  <p class="muted">Produk yang ingin kamu pesan.</p>
-
+  <h2>Keranjang Pesanan</h2><p class="muted">Produk yang ingin kamu pesan.</p>
   <div id="onlineCart">Keranjang masih kosong.</div>
-
-  <h3>Total: <span id="onlineTotal">Rp0</span></h3>
-
-  <hr>
-
+  <h3>Total: <span id="onlineTotal">Rp0</span></h3><hr>
   <h2>Data Pemesan</h2>
-  <input
-    id="customerName"
-    type="text"
-    placeholder="Nama lengkap"
-    autocomplete="name"
-  >
-
-  <input
-    id="customerWhatsapp"
-    type="tel"
-    placeholder="Nomor WhatsApp, contoh 628123456789"
-    autocomplete="tel"
-  >
-
-  <textarea
-    id="customerAddress"
-    placeholder="Alamat lengkap pengiriman"
-    rows="3"
-  ></textarea>
-
-  <textarea
-    id="customerNote"
-    placeholder="Catatan tambahan (opsional)"
-    rows="2"
-  ></textarea>
-
-  <button id="onlineCheckoutBtn" type="button">
-    Buat Pesanan
-  </button>
-
-  <p id="onlineOrderStatus" class="muted">
-    Pesanan akan menunggu konfirmasi admin.
-  </p>
+  <input id="customerName" type="text" placeholder="Nama lengkap" autocomplete="name">
+  <input id="customerWhatsapp" type="tel" placeholder="Nomor WhatsApp, contoh 628123456789" autocomplete="tel">
+  <textarea id="customerAddress" placeholder="Alamat lengkap pengiriman" rows="3"></textarea>
+  <textarea id="customerNote" placeholder="Catatan tambahan (opsional)" rows="2"></textarea>
+  <button id="onlineCheckoutBtn" type="button">Buat Pesanan</button>
 </section>
 
 <section id="connectionPanel" class="panel hidden">
-<h2>Pengaturan Koneksi</h2>
-<button type="button" class="secondary" onclick="document.getElementById('connectionPanel').classList.add('hidden')">Tutup Koneksi</button>
-<p class="muted">Isi URL proyek dan publishable/anon key Supabase. Pengaturan disimpan hanya di browser ini.</p>
-<input id="projectUrl" placeholder="Supabase Project URL" autocomplete="url"><input id="publicKey" placeholder="Supabase publishable key atau anon key" autocomplete="off">
-<button id="saveConfig" type="button">Simpan koneksi &amp; muat katalog</button><p class="muted">Jangan pernah memasukkan service_role key atau secret key di sini.</p></section>
+<h2>Pengaturan Koneksi</h2><button type="button" class="secondary" onclick="document.getElementById('connectionPanel').classList.add('hidden')">Tutup Koneksi</button>
+<p class="muted">Isi URL proyek dan anon key Supabase.</p>
+<input id="projectUrl" placeholder="Supabase Project URL" autocomplete="url"><input id="publicKey" placeholder="Supabase anon key" autocomplete="off">
+<button id="saveConfig" type="button">Simpan koneksi & muat katalog</button>
+</section>
 
 <section id="loginPanel" class="panel hidden">
-<h2>Login Pemilik Toko</h2>
-<p id="adminStatus" class="muted">Belum login.</p>
+<h2>Login Pemilik Toko</h2><p id="adminStatus" class="muted">Belum login.</p>
 <button type="button" class="secondary" onclick="document.getElementById('loginPanel').classList.add('hidden')">Tutup Login</button>
-<p class="muted">Masuk untuk menambahkan produk dan mengatur stok.</p>
 <input id="email" type="email" autocomplete="username" placeholder="Email akun Supabase"><input id="password" type="password" autocomplete="current-password" placeholder="Password akun Supabase">
 <button id="loginBtn" type="button">Login</button><button id="logoutBtn" class="secondary hidden" type="button">Logout</button>
 <button id="connectionAccess" type="button" class="secondary" onclick="document.getElementById('connectionPanel').classList.remove('hidden'); document.getElementById('connectionPanel').scrollIntoView({behavior:'smooth'});">Pengaturan Koneksi</button>
 </section>
-<section id="adminPanel" class="panel hidden"><h2>Kelola Produk</h2>
+
+<section id="adminPanel" class="panel hidden">
+<h2>Ringkasan Keuangan</h2>
+<div class="finance-box">
+  <p class="muted" style="margin:0">Total Pendapatan Terdata</p>
+  <h3 id="financeRevenue">Rp0</h3>
+</div>
+<hr>
+
+<h2>Kelola Produk</h2>
 <input id="pName" placeholder="Nama produk"><textarea id="pDesc" placeholder="Deskripsi produk"></textarea><input id="pSku" placeholder="Kode SKU (opsional)">
 <input id="pPrice" type="number" min="0" step="1" placeholder="Harga jual (Rupiah)"><input id="pCost" type="number" min="0" step="1" placeholder="Harga modal (Rupiah)">
 <input id="pStock" type="number" min="0" step="1" placeholder="Jumlah stok"><input id="pImage" type="url" placeholder="URL gambar produk (opsional)">
-<button id="addProduct" type="button">Tambah produk</button><hr><h3>Atur stok produk</h3><div id="stockManager">Login untuk memuat produk.</div>
-<hr><h2>Kasir / Transaksi</h2><p class="muted">Pilih produk untuk membuat transaksi penjualan.</p><div id="posStatus" class="notice">Produk kasir belum dimuat.</div><div id="posProducts"></div>
+<button id="addProduct" type="button">Tambah produk</button><hr>
+<h3>Atur stok produk</h3><div id="stockManager">Login untuk memuat produk.</div><hr>
+
+<h2>Kasir / Transaksi</h2><p class="muted">Pilih produk untuk membuat transaksi penjualan.</p>
+<div id="posStatus" class="notice">Produk kasir belum dimuat.</div><div id="posProducts" class="products"></div>
 <h3>Keranjang Belanja</h3><div id="posCart">Keranjang masih kosong.</div><h3>Total: <span id="posTotal">Rp0</span></h3>
+
+<div class="finance-box" style="margin-top: 15px;">
+  <h3 style="color:#c4b5fd;">Data Pelanggan & Reward</h3>
+  <input id="posCustomerPhone" type="tel" placeholder="Nomor WA Pelanggan">
+  <input id="posCustomerName" type="text" placeholder="Nama Pelanggan">
+  <p class="muted">Reward didapat: <strong id="rewardPoints" style="color:#a78bfa;">0 Poin</strong></p>
+</div>
+
 <label for="posPayment">Metode pembayaran</label><select id="posPayment"><option value="cash">Tunai</option><option value="transfer">Transfer</option><option value="qris">QRIS</option></select>
-<label for="posNote">Catatan transaksi (opsional)</label><textarea id="posNote" placeholder="Catatan transaksi"></textarea><button id="checkoutBtn" type="button">Simpan Transaksi</button>
-<hr><h3>Riwayat Transaksi</h3><div id="salesHistory">Riwayat belum dimuat.</div></section>
+<label for="posNote">Catatan transaksi (opsional)</label><textarea id="posNote" placeholder="Catatan transaksi"></textarea>
+<button id="checkoutBtn" type="button">Simpan Transaksi</button><hr>
+<h3>Riwayat Transaksi</h3><div id="salesHistory">Riwayat belum dimuat.</div>
+</section>
 </main>
-<footer>
-  WRB mm Devan · Katalog online
-  <button id="ownerAccess" type="button">Login Pemilik</button>
-</footer>
+<footer>WRB mm Devan · Katalog online<br><br><button id="ownerAccess" type="button">Login Pemilik</button></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -388,270 +130,168 @@ const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const rupiah=v=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(v)||0);
 function status(m){$("catalogStatus").textContent=m}
+
 function connect(){
  const url=localStorage.getItem("wrb_supabase_url"), key=localStorage.getItem("wrb_supabase_key");
  if(!url||!key||!window.supabase)return false;
  try{db=window.supabase.createClient(url,key);return true}catch(e){console.error(e);status("URL atau key Supabase tidak valid.");return false}
 }
+
 async function loadCatalog(){
- if(!db&&!connect()){
-  status("Masukkan koneksi Supabase di bagian Pengaturan.");
-  return;
- }
-
- status("Memuat katalog...");
- $("products").innerHTML="";
-
+ if(!db&&!connect()){status("Masukkan koneksi Supabase di bagian Pengaturan.");return;}
+ status("Memuat katalog..."); $("products").innerHTML="";
  try{
-  const {data,error}=await db.rpc("get_public_catalog",{
-   p_slug:STORE_SLUG
-  });
-
+  const {data,error}=await db.rpc("get_public_catalog",{p_slug:STORE_SLUG});
   if(error)throw error;
-
   catalogProducts=(data||[]).filter(p=>Number(p.stock)>0);
-
-  if(!catalogProducts.length){
-   status("Belum ada produk yang tersedia.");
-   renderOnlineCart();
-   return;
-  }
-
-  status("");
-  renderCatalog();
-  renderOnlineCart();
-
- }catch(e){
-  console.error("Error katalog Supabase:",e);
-  status("Katalog gagal: "+(e.message||JSON.stringify(e)));
- }
+  if(!catalogProducts.length){status("Belum ada produk yang tersedia.");renderOnlineCart();return;}
+  status(""); renderCatalog(); renderOnlineCart();
+ }catch(e){console.error(e);status("Katalog gagal dimuat.");}
 }
 
 function renderCatalog(){
  const keyword=($("productSearch")?.value||"").trim().toLowerCase();
-
- const items=catalogProducts.filter(p=>
-  String(p.product_name||"").toLowerCase().includes(keyword)
- );
-
- if(!items.length){
-  $("products").innerHTML='<p class="muted">Produk tidak ditemukan.</p>';
-  return;
- }
-
+ const items=catalogProducts.filter(p=>String(p.product_name||"").toLowerCase().includes(keyword));
+ if(!items.length){$("products").innerHTML='<p class="muted">Produk tidak ditemukan.</p>';return;}
  $("products").innerHTML=items.map(p=>`
   <article class="product">
-   ${p.image_url
-    ? `<img src="${esc(p.image_url)}" alt="${esc(p.product_name)}" loading="lazy">`
-    : `<div style="height:155px;display:grid;place-items:center;background:#0e0c15;color:#a1a1aa">Tanpa gambar</div>`
-   }
-   <div class="info">
-    <h3>${esc(p.product_name)}</h3>
-    <p>${esc(p.description||"")}</p>
-    <div class="price">${rupiah(p.price)}</div>
-    <div class="stock">Stok: ${Number(p.stock)}</div>
-    <button type="button" data-add-online="${esc(p.product_id)}">
-     Tambah ke Keranjang
-    </button>
-   </div>
-  </article>
- `).join("");
+   ${p.image_url ? `<img src="${esc(p.image_url)}" alt="${esc(p.product_name)}" loading="lazy">` : `<div style="height:155px;display:grid;place-items:center;background:#0e0c15;color:#a1a1aa">Tanpa gambar</div>`}
+   <div class="info"><h3>${esc(p.product_name)}</h3><p>${esc(p.description||"")}</p><div class="price">${rupiah(p.price)}</div><div class="stock">Stok: ${Number(p.stock)}</div>
+   <button type="button" data-add-online="${esc(p.product_id)}">Tambah ke Keranjang</button></div>
+  </article>`).join("");
 
  $("products").querySelectorAll("[data-add-online]").forEach(b=>{
   b.addEventListener("click",()=>{
-   const id=b.dataset.addOnline;
-   const p=catalogProducts.find(x=>String(x.product_id)===id);
-   if(!p)return;
-
-   const current=onlineCart[id]||0;
-
-   if(current>=Number(p.stock)){
-    alert("Jumlah melebihi stok yang tersedia.");
-    return;
-   }
-
-   onlineCart[id]=current+1;
-   renderOnlineCart();
+   const id=b.dataset.addOnline; const p=catalogProducts.find(x=>String(x.product_id)===id);
+   if(!p)return; const current=onlineCart[id]||0;
+   if(current>=Number(p.stock)){alert("Jumlah melebihi stok.");return;}
+   onlineCart[id]=current+1; renderOnlineCart();
   });
  });
 }
 
 function renderOnlineCart(){
  const entries=Object.entries(onlineCart).filter(([,q])=>q>0);
-
- if(!entries.length){
-  $("onlineCart").textContent="Keranjang masih kosong.";
-  $("onlineTotal").textContent=rupiah(0);
-  return;
- }
-
+ if(!entries.length){$("onlineCart").textContent="Keranjang masih kosong.";$("onlineTotal").textContent=rupiah(0);return;}
  let total=0;
-
  $("onlineCart").innerHTML=entries.map(([id,q])=>{
-  const p=catalogProducts.find(x=>String(x.product_id)===id);
-  if(!p)return"";
-
-  const subtotal=Number(p.price)*q;
-  total+=subtotal;
-
-  return `
-   <div class="panel">
-    <strong>${esc(p.product_name)}</strong>
-    <p>${rupiah(p.price)} × ${q}</p>
-    <p>Subtotal: ${rupiah(subtotal)}</p>
-    <div class="row">
-     <button type="button" data-online-minus="${esc(id)}">−</button>
-     <button type="button" data-online-plus="${esc(id)}">+</button>
-     <button type="button" class="secondary" data-online-remove="${esc(id)}">Hapus</button>
-    </div>
-   </div>
-  `;
+  const p=catalogProducts.find(x=>String(x.product_id)===id);if(!p)return"";
+  const subtotal=Number(p.price)*q; total+=subtotal;
+  return `<div class="panel"><strong>${esc(p.product_name)}</strong><p>${rupiah(p.price)} × ${q}</p><p>Subtotal: ${rupiah(subtotal)}</p><div class="row"><button type="button" data-online-minus="${esc(id)}">−</button><button type="button" data-online-plus="${esc(id)}">+</button><button type="button" class="secondary" data-online-remove="${esc(id)}">Hapus</button></div></div>`;
  }).join("");
-
  $("onlineTotal").textContent=rupiah(total);
-
- $("onlineCart").querySelectorAll("[data-online-minus]").forEach(b=>{
-  b.addEventListener("click",()=>{
-   const id=b.dataset.onlineMinus;
-   onlineCart[id]--;
-   if(onlineCart[id]<=0)delete onlineCart[id];
-   renderOnlineCart();
-  });
- });
-
- $("onlineCart").querySelectorAll("[data-online-plus]").forEach(b=>{
-  b.addEventListener("click",()=>{
-   const id=b.dataset.onlinePlus;
-   const p=catalogProducts.find(x=>String(x.product_id)===id);
-   if(!p)return;
-
-   if(onlineCart[id]>=Number(p.stock)){
-    alert("Jumlah melebihi stok yang tersedia.");
-    return;
-   }
-
-   onlineCart[id]++;
-   renderOnlineCart();
-  });
- });
-
- $("onlineCart").querySelectorAll("[data-online-remove]").forEach(b=>{
-  b.addEventListener("click",()=>{
-   delete onlineCart[b.dataset.onlineRemove];
-   renderOnlineCart();
-  });
- });
+ $("onlineCart").querySelectorAll("[data-online-minus]").forEach(b=>b.addEventListener("click",()=>{onlineCart[b.dataset.onlineMinus]--;if(onlineCart[b.dataset.onlineMinus]<=0)delete onlineCart[b.dataset.onlineMinus];renderOnlineCart()}));
+ $("onlineCart").querySelectorAll("[data-online-plus]").forEach(b=>b.addEventListener("click",()=>{const id=b.dataset.onlinePlus;const p=catalogProducts.find(x=>String(x.product_id)===id);if(onlineCart[id]>=Number(p.stock))return;onlineCart[id]++;renderOnlineCart()}));
+ $("onlineCart").querySelectorAll("[data-online-remove]").forEach(b=>b.addEventListener("click",()=>{delete onlineCart[b.dataset.onlineRemove];renderOnlineCart()}));
 }
- if(!db&&!connect()){status("Masukkan koneksi Supabase di bagian Pengaturan.");return}
- status("Memuat katalog...");$("products").innerHTML="";
- try{
-  const {data,error}=await db.rpc("get_public_catalog",{p_slug:STORE_SLUG});if(error)throw error;
-  const items=(data||[]).filter(p=>Number(p.stock)>0);
-  if(!items.length){status("Belum ada produk yang tersedia.");return}
-  status("");$("products").innerHTML=items.map(p=>`<article class="product">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.product_name)}" loading="lazy">`:`<div style="height:155px;display:grid;place-items:center;background:#e5e7eb;color:#6b7280">Tanpa gambar</div>`}<div class="info"><h3>${esc(p.product_name)}</h3><p>${esc(p.description||"")}</p><div class="price">${rupiah(p.price)}</div><div class="stock">Stok: ${Number(p.stock)}</div><button class="whatsapp" type="button" data-order="${esc(p.product_name)}">Pesan via WhatsApp</button></div></article>`).join("");
-  $("products").querySelectorAll("[data-order]").forEach(b=>b.addEventListener("click",()=>{const msg=`Halo WRB mm Devan, saya ingin memesan ${b.getAttribute("data-order")}. Apakah masih tersedia?`;window.open("https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(msg),"_blank","noopener")}));
- }catch(e){
- console.error("Error katalog Supabase:",e);
- status("Katalog gagal: "+(e.message||JSON.stringify(e)));
-}
-}
+
 async function showAdmin(){
  if(!db)return;const {data,error}=await db.auth.getSession();
- if(error){$("adminStatus").textContent="Gagal memeriksa status login.";console.error(error);return}
+ if(error){$("adminStatus").textContent="Gagal memeriksa status login.";return;}
  const logged=!!data?.session;$("adminPanel").classList.toggle("hidden",!logged);$("logoutBtn").classList.toggle("hidden",!logged);$("loginBtn").classList.toggle("hidden",logged);
  $("adminStatus").textContent=logged?"Login berhasil. Anda dapat mengelola produk.":"Belum login.";
  if(logged){await loadStockManager();await loadPosProducts();await loadSalesHistory()}
 }
+
 async function loadStockManager(){
  const {data,error}=await db.from("products").select("id,name,stock,is_public").eq("store_id",STORE_ID).order("name");
- if(error){$("stockManager").textContent="Produk gagal dimuat. Pastikan akun Anda pemilik toko.";console.error(error);return}
- if(!data?.length){$("stockManager").textContent="Belum ada produk.";return}
- $("stockManager").innerHTML=data.map(p=>`<div class="panel"><strong>${esc(p.name)}</strong><label>Stok</label><input type="number" min="0" step="1" id="stock-${esc(p.id)}" value="${Number(p.stock)}"><label>Ditampilkan di katalog</label><select id="public-${esc(p.id)}"><option value="true" ${p.is_public?"selected":""}>Ya</option><option value="false" ${!p.is_public?"selected":""}>Tidak</option></select><button type="button" data-save="${esc(p.id)}">Simpan stok</button></div>`).join("");
+ if(error){$("stockManager").textContent="Gagal memuat.";return;}
+ if(!data?.length){$("stockManager").textContent="Belum ada produk.";return;}
+ $("stockManager").innerHTML=data.map(p=>`<div class="panel"><strong>${esc(p.name)}</strong><label>Stok</label><input type="number" min="0" id="stock-${esc(p.id)}" value="${Number(p.stock)}"><label>Ditampilkan di katalog</label><select id="public-${esc(p.id)}"><option value="true" ${p.is_public?"selected":""}>Ya</option><option value="false" ${!p.is_public?"selected":""}>Tidak</option></select><button type="button" data-save="${esc(p.id)}">Simpan stok</button></div>`).join("");
  $("stockManager").querySelectorAll("[data-save]").forEach(b=>b.addEventListener("click",async()=>{
   const id=b.dataset.save, stock=Number($("stock-"+id).value), is_public=$("public-"+id).value==="true";
-  if(!Number.isInteger(stock)||stock<0){alert("Stok harus berupa bilangan bulat nol atau lebih.");return}
   const {error}=await db.from("products").update({stock,is_public}).eq("id",id).eq("store_id",STORE_ID);
-  if(error)alert("Gagal menyimpan stok: "+error.message);else{alert("Stok berhasil disimpan.");await loadStockManager();await loadPosProducts();await loadCatalog()}
+  if(error)alert("Gagal: "+error.message);else{alert("Berhasil!");await loadStockManager();await loadPosProducts();await loadCatalog()}
  }))
 }
+
 async function loadPosProducts(){
  if(!db)return;$("posStatus").textContent="Memuat produk kasir...";
  const {data,error}=await db.from("products").select("id,name,price,stock").eq("store_id",STORE_ID).order("name");
- if(error){$("posStatus").textContent="Produk gagal dimuat. Pastikan sudah login.";console.error(error);return}
+ if(error){$("posStatus").textContent="Gagal memuat produk kasir.";return;}
  posProducts=data||[];
- for(const id of Object.keys(posCart)){const p=posProducts.find(x=>x.id===id);if(!p||Number(p.stock)<=0)delete posCart[id];else if(posCart[id]>Number(p.stock))posCart[id]=Number(p.stock)}
- $("posStatus").textContent=posProducts.length?"Pilih produk untuk dimasukkan ke keranjang.":"Belum ada produk.";renderPosProducts();renderPosCart()
+ $("posStatus").textContent=posProducts.length?"Pilih produk untuk keranjang.":"Belum ada produk.";renderPosProducts();renderPosCart();
 }
+
 function renderPosProducts(){
- $("posProducts").innerHTML=posProducts.map(p=>`<div class="panel"><strong>${esc(p.name)}</strong><p>${rupiah(p.price)}</p><p class="muted">Stok: ${Number(p.stock)}</p><button type="button" data-pos-add="${esc(p.id)}" ${Number(p.stock)<=0?"disabled":""}>Tambah ke Keranjang</button></div>`).join("");
- $("posProducts").querySelectorAll("[data-pos-add]").forEach(b=>b.addEventListener("click",()=>{const id=b.dataset.posAdd,p=posProducts.find(x=>x.id===id);if(!p)return;const q=posCart[id]||0;if(q>=Number(p.stock)){alert("Jumlah melebihi stok yang tersedia.");return}posCart[id]=q+1;renderPosCart()}))
+ $("posProducts").innerHTML=posProducts.map(p=>`<div class="panel"><strong>${esc(p.name)}</strong><p>${rupiah(p.price)}</p><p class="muted">Stok: ${Number(p.stock)}</p><button type="button" data-pos-add="${esc(p.id)}" ${Number(p.stock)<=0?"disabled":""}>Tambah</button></div>`).join("");
+ $("posProducts").querySelectorAll("[data-pos-add]").forEach(b=>b.addEventListener("click",()=>{const id=b.dataset.posAdd,p=posProducts.find(x=>x.id===id);if(!p)return;if((posCart[id]||0)>=Number(p.stock))return;posCart[id]=(posCart[id]||0)+1;renderPosCart()}))
 }
+
 function renderPosCart(){
  const items=Object.entries(posCart).filter(([,q])=>q>0);
- if(!items.length){$("posCart").textContent="Keranjang masih kosong.";$("posTotal").textContent=rupiah(0);return}
- let total=0;$("posCart").innerHTML=items.map(([id,q])=>{const p=posProducts.find(x=>x.id===id);if(!p)return"";const sub=Number(p.price)*q;total+=sub;return`<div class="panel"><strong>${esc(p.name)}</strong><p>${rupiah(p.price)} × ${q}</p><p>Subtotal: ${rupiah(sub)}</p><div class="row"><button type="button" data-minus="${esc(id)}">−</button><button type="button" data-plus="${esc(id)}">+</button><button type="button" class="secondary" data-remove="${esc(id)}">Hapus</button></div></div>`}).join("");
+ if(!items.length){$("posCart").textContent="Keranjang masih kosong.";$("posTotal").textContent=rupiah(0);$("rewardPoints").textContent="0 Poin";return}
+ let total=0;
+ $("posCart").innerHTML=items.map(([id,q])=>{const p=posProducts.find(x=>x.id===id);if(!p)return"";const sub=Number(p.price)*q;total+=sub;return`<div class="panel"><strong>${esc(p.name)}</strong><p>${rupiah(p.price)} × ${q}</p><p>Subtotal: ${rupiah(sub)}</p><div class="row"><button type="button" data-minus="${esc(id)}">−</button><button type="button" data-plus="${esc(id)}">+</button><button type="button" class="secondary" data-remove="${esc(id)}">Hapus</button></div></div>`}).join("");
  $("posTotal").textContent=rupiah(total);
- $("posCart").querySelectorAll("[data-minus]").forEach(b=>b.addEventListener("click",()=>{const id=b.dataset.minus;posCart[id]--;if(posCart[id]<=0)delete posCart[id];renderPosCart()}));
- $("posCart").querySelectorAll("[data-plus]").forEach(b=>b.addEventListener("click",()=>{const id=b.dataset.plus,p=posProducts.find(x=>x.id===id);if(!p)return;if((posCart[id]||0)>=Number(p.stock)){alert("Jumlah melebihi stok yang tersedia.");return}posCart[id]++;renderPosCart()}));
+ $("rewardPoints").textContent=Math.floor(total/10000) + " Poin"; // 1 Poin per 10k
+ $("posCart").querySelectorAll("[data-minus]").forEach(b=>b.addEventListener("click",()=>{posCart[b.dataset.minus]--;if(posCart[b.dataset.minus]<=0)delete posCart[b.dataset.minus];renderPosCart()}));
+ $("posCart").querySelectorAll("[data-plus]").forEach(b=>b.addEventListener("click",()=>{const id=b.dataset.plus,p=posProducts.find(x=>x.id===id);if((posCart[id]||0)>=Number(p.stock))return;posCart[id]++;renderPosCart()}));
  $("posCart").querySelectorAll("[data-remove]").forEach(b=>b.addEventListener("click",()=>{delete posCart[b.dataset.remove];renderPosCart()}))
 }
+
 async function loadSalesHistory(){
- const {data,error}=await db.from("sales").select("id,total,payment_method,sold_at").eq("store_id",STORE_ID).order("sold_at",{ascending:false}).limit(10);
- if(error){$("salesHistory").textContent="Riwayat transaksi gagal dimuat.";console.error(error);return}
- if(!data?.length){$("salesHistory").textContent="Belum ada transaksi.";return}
- $("salesHistory").innerHTML=data.map(s=>`<div class="panel"><strong>${esc(new Date(s.sold_at).toLocaleString("id-ID"))}</strong><p>Total: ${rupiah(s.total)}</p><p>Bayar: ${esc(s.payment_method)}</p><p class="muted">ID: ${esc(s.id)}</p></div>`).join("")
+ const {data,error}=await db.from("sales").select("id,total,payment_method,sold_at").eq("store_id",STORE_ID).order("sold_at",{ascending:false});
+ if(error)return;
+ let totalRev = 0;
+ $("salesHistory").innerHTML=(data||[]).map(s=>{
+  totalRev += Number(s.total);
+  return `<div class="panel"><strong>${esc(new Date(s.sold_at).toLocaleString("id-ID"))}</strong><p>Total: ${rupiah(s.total)}</p><p>Bayar: ${esc(s.payment_method)}</p></div>`;
+ }).join("");
+ $("financeRevenue").textContent = rupiah(totalRev);
 }
+
 $("saveConfig").addEventListener("click",async()=>{
  const url=$("projectUrl").value.trim().replace(/\/+$/,""),key=$("publicKey").value.trim();
- if(!/^https:\/\/[a-zA-Z0-9.-]+$/.test(url)||!key){alert("Masukkan Project URL HTTPS dan publishable/anon key yang benar.");return}
  localStorage.setItem("wrb_supabase_url",url);localStorage.setItem("wrb_supabase_key",key);
- if(!connect()){alert("Koneksi Supabase gagal.");return}await loadCatalog();await showAdmin()
+ if(connect()){await loadCatalog();await showAdmin();}
 });
 $("loginBtn").addEventListener("click",async()=>{
- if(!db&&!connect()){alert("Simpan koneksi Supabase terlebih dahulu.");return}
+ if(!db&&!connect())return;
  const {error}=await db.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});
  if(error)alert("Login gagal: "+error.message);else{$("password").value="";await showAdmin()}
 });
 $("logoutBtn").addEventListener("click",async()=>{
- if(!db)return;const {error}=await db.auth.signOut();if(error){alert("Logout gagal: "+error.message);return}posCart={};await showAdmin()
+ if(!db)return;await db.auth.signOut();posCart={};await showAdmin()
 });
 $("addProduct").addEventListener("click",async()=>{
- if(!db){alert("Koneksi Supabase belum siap.");return}
- const {data:sessionData}=await db.auth.getSession();if(!sessionData?.session){alert("Silakan login terlebih dahulu.");return}
+ if(!db)return;
  const name=$("pName").value.trim(),price=Number($("pPrice").value),cost=Number($("pCost").value||0),stock=Number($("pStock").value);
- if(!name||$("pPrice").value===""||$("pStock").value===""||!Number.isFinite(price)||price<0||!Number.isFinite(cost)||cost<0||!Number.isInteger(stock)||stock<0){alert("Isi nama, harga jual, dan stok dengan benar.");return}
  const {error}=await db.from("products").insert({store_id:STORE_ID,name,description:$("pDesc").value.trim(),sku:$("pSku").value.trim()||null,price,cost_price:cost,stock,image_url:$("pImage").value.trim()||null,is_public:true});
- if(error){alert("Produk gagal ditambahkan: "+error.message);return}
- alert("Produk berhasil ditambahkan.");["pName","pDesc","pSku","pPrice","pCost","pStock","pImage"].forEach(id=>$(id).value="");await loadStockManager();await loadPosProducts();await loadCatalog()
+ if(error)alert("Gagal: "+error.message);else{alert("Berhasil!");await loadStockManager();await loadPosProducts();await loadCatalog()}
 });
 $("checkoutBtn").addEventListener("click",async()=>{
- if(!db){alert("Koneksi Supabase belum siap.");return}
- const {data:sessionData,error:sessionError}=await db.auth.getSession();if(sessionError||!sessionData?.session){alert("Silakan login sebagai pemilik toko.");return}
+ if(!db)return;
  const items=Object.entries(posCart).filter(([,q])=>Number.isInteger(q)&&q>0).map(([product_id,quantity])=>({product_id,quantity}));
- if(!items.length){alert("Keranjang masih kosong.");return}if(!confirm("Simpan transaksi dan kurangi stok produk?"))return;
- const b=$("checkoutBtn");b.disabled=true;b.textContent="Menyimpan transaksi...";
+ if(!items.length)return; if(!confirm("Simpan transaksi?"))return;
+ $("checkoutBtn").disabled=true;
  try{
-  const {data:saleId,error}=await db.rpc("create_sale",{p_store_id:STORE_ID,p_items:items,p_payment_method:$("posPayment").value,p_note:$("posNote").value.trim()});if(error)throw error;
-  posCart={};$("posNote").value="";alert("Transaksi berhasil disimpan!\nID: "+saleId);await loadPosProducts();await loadStockManager();await loadCatalog();await loadSalesHistory()
- }catch(e){console.error(e);alert("Transaksi gagal: "+e.message);await loadPosProducts()}
- finally{b.disabled=false;b.textContent="Simpan Transaksi"}
+  const {data:saleId,error}=await db.rpc("create_sale",{p_store_id:STORE_ID,p_items:items,p_payment_method:$("posPayment").value,p_note:$("posNote").value.trim()});
+  if(error)throw error;
+  
+  // Fitur Data Pelanggan (Membutuhkan Penyesuaian di Backend)
+  const custName = $("posCustomerName").value.trim();
+  const custPhone = $("posCustomerPhone").value.trim();
+  const points = Math.floor(parseInt($("posTotal").textContent.replace(/\D/g, '')) / 10000);
+  if(custPhone){
+     console.log(`Menyimpan ${points} Poin untuk ${custName||custPhone} pada Transaksi ${saleId}`);
+     // Todo Supabase: INSERT into customers (phone, name, points) VALUES (...) ON CONFLICT UPDATE points
+  }
+
+  posCart={}; $("posCustomerName").value=""; $("posCustomerPhone").value=""; alert("Berhasil!"); 
+  await loadPosProducts(); await loadStockManager(); await loadCatalog(); await loadSalesHistory();
+ }catch(e){alert("Gagal: "+e.message);}finally{$("checkoutBtn").disabled=false;}
 });
   
 $("productSearch").addEventListener("input",renderCatalog);
 $("ownerAccess").addEventListener("click",()=>{
-$("loginPanel").classList.remove("hidden");
-$("loginPanel").scrollIntoView({behavior:"smooth"});
+$("loginPanel").classList.remove("hidden");$("loginPanel").scrollIntoView({behavior:"smooth"});
 });
 
 window.addEventListener("DOMContentLoaded",async()=>{
  $("projectUrl").value=localStorage.getItem("wrb_supabase_url")||"";
- if(connect()){
-   await loadCatalog();
- }else{
-   status("Masukkan koneksi Supabase di bagian Pengaturan.");
- }
+ if(connect()) await loadCatalog();
 });
-
 </script>
 </body>
 </html>
